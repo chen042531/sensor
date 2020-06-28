@@ -26,8 +26,9 @@ public class sensor implements SensorEventListener {
     public sensor() {}
 
 
-    private void initBfRun() {
-        gSensorValues[0] = gSensorValues[1] = gSensorValues[2] = 0;
+    private  void initBfRun() {
+
+        gSensorValues[0] = gSensorValues[1] = gSensorValues[2] = 10;
         magneticValues[0] = magneticValues[1] = magneticValues[2] = 0;
         orienValue[0] = orienValue[1] = orienValue[2] = 0;
         lightValue = -1;
@@ -82,10 +83,13 @@ public class sensor implements SensorEventListener {
             sensorManager.registerListener(this, mMagnetic, sensorManager.SENSOR_DELAY_NORMAL);
         }
     }
-
+    public static void print(){
+        Log.i("haha","gagagag");
+    }
     public void startService(SensorManager sensorManager) {
         initBfRun();
         setSensor(sensorManager);
+
     }
 
     public void stopService(SensorManager sensorManager) {
@@ -108,11 +112,14 @@ public class sensor implements SensorEventListener {
                             gSensorValuesTemp[0] = values[0];
                             gSensorValuesTemp[1] = values[1];
                             gSensorValuesTemp[2] = values[2];
+//                            Log.i("ggg", String.valueOf("ACCELEROMETER"+gSensorValuesTemp[0]+","+gSensorValuesTemp[1]+","+gSensorValuesTemp[2]));
 //                            FileMaker.write(JsonParser.sensorInfoToJson("ACCELEROMETER", gSensorValuesTemp[0]+","+gSensorValuesTemp[1]+","+gSensorValuesTemp[2]));
                         }
                         gSensorValues[0] = values[0];
                         gSensorValues[1] = values[1];
                         gSensorValues[2] = values[2];
+                        Log.i("kkkkk", String.valueOf("ACCELEROMETER"+gSensorValues[0]+","+gSensorValues[1]+","+gSensorValues[2]));
+
                         break;
 
                     case Sensor.TYPE_PROXIMITY:
