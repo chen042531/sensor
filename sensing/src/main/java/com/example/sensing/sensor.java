@@ -1,10 +1,13 @@
 package com.example.sensing;
 
+import android.app.Activity;
+import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.util.Log;
+import android.widget.TextView;
 
 public class sensor implements SensorEventListener {
 
@@ -22,8 +25,12 @@ public class sensor implements SensorEventListener {
     private static float[] gSensorValuesTemp = new float[3];
     private static float[] magneticValuesTemp = new float[3];
     private static float[] orienValueTemp = new float[3];
-
-    public sensor() {}
+    public Context context;
+    public static TextView tt;
+    public sensor(Context context, TextView text) {
+        this.context = context;
+        this.tt = text;
+    }
 
 
     private  void initBfRun() {
@@ -100,85 +107,165 @@ public class sensor implements SensorEventListener {
     @Override
     public void onSensorChanged(final SensorEvent event) {
         // TODO Auto-generated method stub
-        //Writing file in new thread 2018/10/07
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                switch (event.sensor.getType()) {
-                    case Sensor.TYPE_ACCELEROMETER:
-                        float[] values = event.values;
-                        // Update the value of triaxial acceleration when an axis changed exceed 1
-                        if(Math.abs(gSensorValuesTemp[0]-values[0])>=1 || Math.abs(gSensorValuesTemp[1]-values[1])>=1 || Math.abs(gSensorValuesTemp[2]-values[2])>=1){
-                            gSensorValuesTemp[0] = values[0];
-                            gSensorValuesTemp[1] = values[1];
-                            gSensorValuesTemp[2] = values[2];
+        switch (event.sensor.getType()) {
+            case Sensor.TYPE_ACCELEROMETER:
+                float[] values = event.values;
+                // Update the value of triaxial acceleration when an axis changed exceed 1
+                if(Math.abs(gSensorValuesTemp[0]-values[0])>=1 || Math.abs(gSensorValuesTemp[1]-values[1])>=1 || Math.abs(gSensorValuesTemp[2]-values[2])>=1){
+                    gSensorValuesTemp[0] = values[0];
+                    gSensorValuesTemp[1] = values[1];
+                    gSensorValuesTemp[2] = values[2];
 //                            Log.i("ggg", String.valueOf("ACCELEROMETER"+gSensorValuesTemp[0]+","+gSensorValuesTemp[1]+","+gSensorValuesTemp[2]));
 //                            FileMaker.write(JsonParser.sensorInfoToJson("ACCELEROMETER", gSensorValuesTemp[0]+","+gSensorValuesTemp[1]+","+gSensorValuesTemp[2]));
-                        }
-                        gSensorValues[0] = values[0];
-                        gSensorValues[1] = values[1];
-                        gSensorValues[2] = values[2];
-                        Log.i("kkkkk", String.valueOf("ACCELEROMETER"+gSensorValues[0]+","+gSensorValues[1]+","+gSensorValues[2]));
-
-                        break;
-
-                    case Sensor.TYPE_PROXIMITY:
-                        String str;
-                        if (event.values[0] == 0) {
-                            str = "near";
-                        } else {
-                            str = "far";
-                        }
-                        proximityValue = str;
-                        Log.d("9487", "TYPE_PROXIMITY: "+event.values[0]);
-//                        FileMaker.write(JsonParser.sensorInfoToJson("PROXIMITY", str));
-                        break;
-
-                    case Sensor.TYPE_LIGHT: //lux
-                        if(Math.abs(lightValue-event.values[0])>=10){
-                            lightValue = (int)event.values[0];
-                            Log.d("9487", "TYPE_LIGHT: "+event.values[0]);
-//                            FileMaker.write(JsonParser.sensorInfoToJson("LIGHT", ""+event.values[0]));
-                        }
-                        break;
-
-                    case Sensor.TYPE_PRESSURE: //hPa
-//                        FileMaker.write(JsonParser.sensorInfoToJson("PRESSURE", ""+event.values[0]));
-                        break;
-
-                    case Sensor.TYPE_MAGNETIC_FIELD: // Measures the ambient geomagnetic field for all three physical axes (x, y, z) in μT.
-                        float[] mValues = event.values;
-                        if(Math.abs(magneticValuesTemp[0]-mValues[0])>=10 || Math.abs(magneticValuesTemp[1]-mValues[1])>=10 || Math.abs(magneticValuesTemp[2]-mValues[2])>=10){
-                            magneticValuesTemp[0] = mValues[0];
-                            magneticValuesTemp[1] = mValues[1];
-                            magneticValuesTemp[2] = mValues[2];
-//                            FileMaker.write(JsonParser.sensorInfoToJson("MAGNETIC_FIELD", magneticValuesTemp[0]+","+magneticValuesTemp[1]+","+magneticValuesTemp[2]));
-                        }
-                        magneticValues[0] = mValues[0];
-                        magneticValues[1] = mValues[1];
-                        magneticValues[2] = mValues[2];
-                        break;
                 }
+                gSensorValues[0] = values[0];
+                gSensorValues[1] = values[1];
+                gSensorValues[2] = values[2];
+                Log.i("kkkkk", String.valueOf("ACCELEROMETER"+gSensorValues[0]+","+gSensorValues[1]+","+gSensorValues[2]));
+//
+                tt = (TextView) ((Activity)context).findViewById(R.id.text2);
 
-                float[] tempValues = new float[3];
-                SensorManager.getRotationMatrix(rMatrix, null, gSensorValues, magneticValues);
-                SensorManager.getOrientation(rMatrix, tempValues);
-                if(Math.abs(orienValueTemp[0]-(float) Math.toDegrees(tempValues[0]))>=15 ||
-                        Math.abs(orienValueTemp[1]-(float) Math.toDegrees(tempValues[1]))>=15 ||
-                        Math.abs(orienValueTemp[2]-(float) Math.toDegrees(tempValues[2]))>=15
-                ){
-                    orienValueTemp[0] = (float) Math.toDegrees(tempValues[0]);
-                    orienValueTemp[1] = (float) Math.toDegrees(tempValues[1]);
-                    orienValueTemp[2] = (float) Math.toDegrees(tempValues[2]);
+                tt.setText(String.valueOf("ACCELEROMETER"+gSensorValues[0]+","+gSensorValues[1]+","+gSensorValues[2]));
+                break;
+
+            case Sensor.TYPE_PROXIMITY:
+                String str;
+                if (event.values[0] == 0) {
+                    str = "near";
+                } else {
+                    str = "far";
+                }
+                proximityValue = str;
+                Log.d("9487", "TYPE_PROXIMITY: "+event.values[0]);
+//                        FileMaker.write(JsonParser.sensorInfoToJson("PROXIMITY", str));
+                break;
+
+            case Sensor.TYPE_LIGHT: //lux
+                if(Math.abs(lightValue-event.values[0])>=10){
+                    lightValue = (int)event.values[0];
+
+                    Log.d("9487", "TYPE_LIGHT: "+event.values[0]);
+//                            FileMaker.write(JsonParser.sensorInfoToJson("LIGHT", ""+event.values[0]));
+                }
+                break;
+
+            case Sensor.TYPE_PRESSURE: //hPa
+//                        FileMaker.write(JsonParser.sensorInfoToJson("PRESSURE", ""+event.values[0]));
+                break;
+
+            case Sensor.TYPE_MAGNETIC_FIELD: // Measures the ambient geomagnetic field for all three physical axes (x, y, z) in μT.
+                float[] mValues = event.values;
+                if(Math.abs(magneticValuesTemp[0]-mValues[0])>=10 || Math.abs(magneticValuesTemp[1]-mValues[1])>=10 || Math.abs(magneticValuesTemp[2]-mValues[2])>=10){
+                    magneticValuesTemp[0] = mValues[0];
+                    magneticValuesTemp[1] = mValues[1];
+                    magneticValuesTemp[2] = mValues[2];
+//                            FileMaker.write(JsonParser.sensorInfoToJson("MAGNETIC_FIELD", magneticValuesTemp[0]+","+magneticValuesTemp[1]+","+magneticValuesTemp[2]));
+                }
+                magneticValues[0] = mValues[0];
+                magneticValues[1] = mValues[1];
+                magneticValues[2] = mValues[2];
+                break;
+        }
+
+        float[] tempValues = new float[3];
+        SensorManager.getRotationMatrix(rMatrix, null, gSensorValues, magneticValues);
+        SensorManager.getOrientation(rMatrix, tempValues);
+        if(Math.abs(orienValueTemp[0]-(float) Math.toDegrees(tempValues[0]))>=15 ||
+                Math.abs(orienValueTemp[1]-(float) Math.toDegrees(tempValues[1]))>=15 ||
+                Math.abs(orienValueTemp[2]-(float) Math.toDegrees(tempValues[2]))>=15
+        ){
+            orienValueTemp[0] = (float) Math.toDegrees(tempValues[0]);
+            orienValueTemp[1] = (float) Math.toDegrees(tempValues[1]);
+            orienValueTemp[2] = (float) Math.toDegrees(tempValues[2]);
 //                    FileMaker.write(JsonParser.sensorInfoToJson("ROTATION",orienValueTemp[0]+","+orienValueTemp[1]+","+orienValueTemp[2]));
 
-                }
-                orienValue[0] = (float) Math.toDegrees(tempValues[0]);
-                orienValue[1] = (float) Math.toDegrees(tempValues[1]);
-                orienValue[2] = (float) Math.toDegrees(tempValues[2]);
-
-            }
-        }).start();
+        }
+        orienValue[0] = (float) Math.toDegrees(tempValues[0]);
+        orienValue[1] = (float) Math.toDegrees(tempValues[1]);
+        orienValue[2] = (float) Math.toDegrees(tempValues[2]);
+        //Writing file in new thread 2018/10/07
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                switch (event.sensor.getType()) {
+//                    case Sensor.TYPE_ACCELEROMETER:
+//                        float[] values = event.values;
+//                        // Update the value of triaxial acceleration when an axis changed exceed 1
+//                        if(Math.abs(gSensorValuesTemp[0]-values[0])>=1 || Math.abs(gSensorValuesTemp[1]-values[1])>=1 || Math.abs(gSensorValuesTemp[2]-values[2])>=1){
+//                            gSensorValuesTemp[0] = values[0];
+//                            gSensorValuesTemp[1] = values[1];
+//                            gSensorValuesTemp[2] = values[2];
+////                            Log.i("ggg", String.valueOf("ACCELEROMETER"+gSensorValuesTemp[0]+","+gSensorValuesTemp[1]+","+gSensorValuesTemp[2]));
+////                            FileMaker.write(JsonParser.sensorInfoToJson("ACCELEROMETER", gSensorValuesTemp[0]+","+gSensorValuesTemp[1]+","+gSensorValuesTemp[2]));
+//                        }
+//                        gSensorValues[0] = values[0];
+//                        gSensorValues[1] = values[1];
+//                        gSensorValues[2] = values[2];
+//                        Log.i("kkkkk", String.valueOf("ACCELEROMETER"+gSensorValues[0]+","+gSensorValues[1]+","+gSensorValues[2]));
+////                        tt.setText(String.valueOf("ACCELEROMETER"+gSensorValues[0]+","+gSensorValues[1]+","+gSensorValues[2]));
+//                        tt = (TextView) ((Activity)context).findViewById(R.id.text2);
+//
+//                        tt.setText("gg2");
+//                        break;
+//
+//                    case Sensor.TYPE_PROXIMITY:
+//                        String str;
+//                        if (event.values[0] == 0) {
+//                            str = "near";
+//                        } else {
+//                            str = "far";
+//                        }
+//                        proximityValue = str;
+//                        Log.d("9487", "TYPE_PROXIMITY: "+event.values[0]);
+////                        FileMaker.write(JsonParser.sensorInfoToJson("PROXIMITY", str));
+//                        break;
+//
+//                    case Sensor.TYPE_LIGHT: //lux
+//                        if(Math.abs(lightValue-event.values[0])>=10){
+//                            lightValue = (int)event.values[0];
+//
+//                            Log.d("9487", "TYPE_LIGHT: "+event.values[0]);
+////                            FileMaker.write(JsonParser.sensorInfoToJson("LIGHT", ""+event.values[0]));
+//                        }
+//                        break;
+//
+//                    case Sensor.TYPE_PRESSURE: //hPa
+////                        FileMaker.write(JsonParser.sensorInfoToJson("PRESSURE", ""+event.values[0]));
+//                        break;
+//
+//                    case Sensor.TYPE_MAGNETIC_FIELD: // Measures the ambient geomagnetic field for all three physical axes (x, y, z) in μT.
+//                        float[] mValues = event.values;
+//                        if(Math.abs(magneticValuesTemp[0]-mValues[0])>=10 || Math.abs(magneticValuesTemp[1]-mValues[1])>=10 || Math.abs(magneticValuesTemp[2]-mValues[2])>=10){
+//                            magneticValuesTemp[0] = mValues[0];
+//                            magneticValuesTemp[1] = mValues[1];
+//                            magneticValuesTemp[2] = mValues[2];
+////                            FileMaker.write(JsonParser.sensorInfoToJson("MAGNETIC_FIELD", magneticValuesTemp[0]+","+magneticValuesTemp[1]+","+magneticValuesTemp[2]));
+//                        }
+//                        magneticValues[0] = mValues[0];
+//                        magneticValues[1] = mValues[1];
+//                        magneticValues[2] = mValues[2];
+//                        break;
+//                }
+//
+//                float[] tempValues = new float[3];
+//                SensorManager.getRotationMatrix(rMatrix, null, gSensorValues, magneticValues);
+//                SensorManager.getOrientation(rMatrix, tempValues);
+//                if(Math.abs(orienValueTemp[0]-(float) Math.toDegrees(tempValues[0]))>=15 ||
+//                        Math.abs(orienValueTemp[1]-(float) Math.toDegrees(tempValues[1]))>=15 ||
+//                        Math.abs(orienValueTemp[2]-(float) Math.toDegrees(tempValues[2]))>=15
+//                ){
+//                    orienValueTemp[0] = (float) Math.toDegrees(tempValues[0]);
+//                    orienValueTemp[1] = (float) Math.toDegrees(tempValues[1]);
+//                    orienValueTemp[2] = (float) Math.toDegrees(tempValues[2]);
+////                    FileMaker.write(JsonParser.sensorInfoToJson("ROTATION",orienValueTemp[0]+","+orienValueTemp[1]+","+orienValueTemp[2]));
+//
+//                }
+//                orienValue[0] = (float) Math.toDegrees(tempValues[0]);
+//                orienValue[1] = (float) Math.toDegrees(tempValues[1]);
+//                orienValue[2] = (float) Math.toDegrees(tempValues[2]);
+//
+//            }
+//        }).start();
 
     }
 
