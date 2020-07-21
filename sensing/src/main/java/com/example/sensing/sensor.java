@@ -274,3 +274,4 @@ public class sensor implements SensorEventListener {
         // TODO Auto-generated method stub
     }
 }
+//http://berniechenopenvpn.blogspot.com/2016/08/sensormanagerregisterlitener.html

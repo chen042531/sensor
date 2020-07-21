@@ -2,4 +2,6 @@
     package="com.example.sensing">
 
     /
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 </manifest>
