@@ -2,11 +2,15 @@ package com.example.sensor;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
+import android.telephony.gsm.GsmCellLocation;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.example.sensing.CellInfo;
 import com.example.sensing.sensor;
 
 import static com.example.sensing.sensor.gSensorValues;
@@ -16,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
     private SensorManager sensorManager;
     private sensor sr ;
+    private CellInfo cellInfo         ;
     public  TextView text;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +30,11 @@ public class MainActivity extends AppCompatActivity {
         sr.print();
         sensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
         sr.startService(sensorManager);
+
+        cellInfo = new CellInfo();
+        TelephonyManager telephony = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+
+        cellInfo.startService(telephony);
 //        Log.i("ggff", String.valueOf("ACCELEROMETER"+gSensorValues[0]+","+gSensorValues[1]+","+gSensorValues[2]));
 //        new Thread(new Runnable() {
 //            @Override

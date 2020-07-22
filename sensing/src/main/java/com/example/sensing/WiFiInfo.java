@@ -1,4 +1,4 @@
 package com.example.sensing;
 
-public class battery {
+public class WiFiInfo {
 }
