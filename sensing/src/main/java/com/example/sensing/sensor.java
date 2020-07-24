@@ -121,11 +121,11 @@ public class sensor implements SensorEventListener {
                 gSensorValues[0] = values[0];
                 gSensorValues[1] = values[1];
                 gSensorValues[2] = values[2];
-                Log.i("kkkkk", String.valueOf("ACCELEROMETER"+gSensorValues[0]+","+gSensorValues[1]+","+gSensorValues[2]));
+//                Log.i("kkkkk", String.valueOf("ACCELEROMETER"+gSensorValues[0]+","+gSensorValues[1]+","+gSensorValues[2]));
 //
                 tt = (TextView) ((Activity)context).findViewById(R.id.text2);
 
-                tt.setText(String.valueOf("ACCELEROMETER"+gSensorValues[0]+","+gSensorValues[1]+","+gSensorValues[2]));
+//                tt.setText(String.valueOf("ACCELEROMETER"+gSensorValues[0]+","+gSensorValues[1]+","+gSensorValues[2]));
                 break;
 
             case Sensor.TYPE_PROXIMITY:
