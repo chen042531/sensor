@@ -26,24 +26,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        sr =  new sensor(this,text);
-        sr.print();
-        sensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
-        sr.startService(sensorManager);
+        sr =  new sensor(this);
+//        sr.print();
+//        sensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
+        sr.startService();
 
-        cellInfo = new CellInfo();
-        TelephonyManager telephony = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-
-        cellInfo.startService(telephony);
-//        Log.i("ggff", String.valueOf("ACCELEROMETER"+gSensorValues[0]+","+gSensorValues[1]+","+gSensorValues[2]));
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                Log.i("ggff", String.valueOf("ACCELEROMETER"+gSensorValues[0]+","+gSensorValues[1]+","+gSensorValues[2]));
-//            }
-//        }).start();
-//        text = (TextView)findViewById(R.id.textView);
-//        text.setText("gg");
 
     }
 }

@@ -10,6 +10,8 @@ import android.util.Log;
 import androidx.core.app.ActivityCompat;
 
 public class CellInfo {
+
+    public
     public void startService(TelephonyManager telephony) {
 
         if (telephony.getPhoneType() == TelephonyManager.PHONE_TYPE_GSM) {

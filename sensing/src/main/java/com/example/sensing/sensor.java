@@ -9,8 +9,11 @@ import android.hardware.SensorManager;
 import android.util.Log;
 import android.widget.TextView;
 
+import static android.content.Context.SENSOR_SERVICE;
+
 public class sensor implements SensorEventListener {
 
+    private SensorManager sensorManager;
     public static float[] gSensorValues = new float[3]; // triaxial acceleration
     public static float[] magneticValues = new float[3];
     public static int lightValue;
@@ -25,11 +28,11 @@ public class sensor implements SensorEventListener {
     private static float[] gSensorValuesTemp = new float[3];
     private static float[] magneticValuesTemp = new float[3];
     private static float[] orienValueTemp = new float[3];
-    public Context context;
+    public Context mContext;
     public static TextView tt;
-    public sensor(Context context, TextView text) {
-        this.context = context;
-        this.tt = text;
+    public sensor(Context mContext) {
+        this.mContext = mContext;
+        this.sensorManager = (SensorManager)mContext.getSystemService(SENSOR_SERVICE);
     }
 
 
@@ -46,12 +49,7 @@ public class sensor implements SensorEventListener {
         orienValueTemp[0] = orienValueTemp[1] = orienValueTemp[2] = 0;
     }
 
-    /**
-     * Register SensorEventListener for following sensors:
-     *      Accelerometer, Proximity, Light, Barometer, and Magnetic
-     * @param sensorManager access the device's sensors.
-     */
-    protected void setSensor(SensorManager sensorManager) {
+    protected void setSensor() {
         Sensor mAccelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         if (mAccelerometer == null){
             //No Accelerometer Sensor!
@@ -93,9 +91,9 @@ public class sensor implements SensorEventListener {
     public static void print(){
         Log.i("haha","gagagag");
     }
-    public void startService(SensorManager sensorManager) {
+    public void startService() {
         initBfRun();
-        setSensor(sensorManager);
+        setSensor();
 
     }
 
@@ -123,9 +121,9 @@ public class sensor implements SensorEventListener {
                 gSensorValues[2] = values[2];
                 Log.i("kkkkk", String.valueOf("ACCELEROMETER"+gSensorValues[0]+","+gSensorValues[1]+","+gSensorValues[2]));
 //
-                tt = (TextView) ((Activity)context).findViewById(R.id.text2);
 
-                tt.setText(String.valueOf("ACCELEROMETER"+gSensorValues[0]+","+gSensorValues[1]+","+gSensorValues[2]));
+
+//                tt.setText(String.valueOf("ACCELEROMETER"+gSensorValues[0]+","+gSensorValues[1]+","+gSensorValues[2]));
                 break;
 
             case Sensor.TYPE_PROXIMITY:
