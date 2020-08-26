@@ -1,6 +1,5 @@
 package com.example.sensing;
 
-import android.app.Activity;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -92,16 +91,17 @@ public class sensor implements SensorEventListener {
     public static void print(){
         Log.i("haha","gagagag");
     }
-    public void startService(DataListener dataListener) {
+    public void startService(DataListener dListener) {
         initBfRun();
         setSensor();
-        dataListener = dataListener;
+        dataListener = dListener;
     }
 
     public void stopService(SensorManager sensorManager) {
         // Accelerometer, Light, Proximity, Barometer, Magnetometer
         sensorManager.unregisterListener(this);
     }
+
 
     @Override
     public void onSensorChanged(final SensorEvent event) {
@@ -271,6 +271,11 @@ public class sensor implements SensorEventListener {
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
         // TODO Auto-generated method stub
+    }
+    public float getAccData() {
+        Log.i("ssss", String.valueOf(gSensorValuesTemp[0]));
+        return gSensorValuesTemp[0];
+
     }
 }
 //http://berniechenopenvpn.blogspot.com/2016/08/sensormanagerregisterlitener.html
