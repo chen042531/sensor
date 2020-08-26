@@ -33,12 +33,15 @@ public class MainActivity extends AppCompatActivity {
         sr =  new sensor(this);
 //        sr.print();
 //        sensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
-        sr.startService(new DListener(sr){
+        final TextView tv1 = (TextView)findViewById(R.id.textView2);
+
+        sr.startService(new DListener(sr,tv1){
 
             @Override
             public void onDataReceived() {
                 Log.i("ssss","dddd");
-                sr.getAccData();
+                String s = String.valueOf(sr.getAccData());
+                tv1.setText(s);
             }
         });
 
