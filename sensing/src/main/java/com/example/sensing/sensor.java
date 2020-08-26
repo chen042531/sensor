@@ -30,6 +30,7 @@ public class sensor implements SensorEventListener {
     private static float[] orienValueTemp = new float[3];
     public Context mContext;
     public static TextView tt;
+    public DataListener dataListener;
     public sensor(Context mContext) {
         this.mContext = mContext;
         this.sensorManager = (SensorManager)mContext.getSystemService(SENSOR_SERVICE);
@@ -91,10 +92,10 @@ public class sensor implements SensorEventListener {
     public static void print(){
         Log.i("haha","gagagag");
     }
-    public void startService() {
+    public void startService(DataListener dataListener) {
         initBfRun();
         setSensor();
-
+        dataListener = dataListener;
     }
 
     public void stopService(SensorManager sensorManager) {
@@ -122,7 +123,7 @@ public class sensor implements SensorEventListener {
                 Log.i("kkkkk", String.valueOf("ACCELEROMETER"+gSensorValues[0]+","+gSensorValues[1]+","+gSensorValues[2]));
 //
 
-
+                dataListener.onDataReceived();
 //                tt.setText(String.valueOf("ACCELEROMETER"+gSensorValues[0]+","+gSensorValues[1]+","+gSensorValues[2]));
                 break;
 

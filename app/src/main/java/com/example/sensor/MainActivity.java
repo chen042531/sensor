@@ -11,6 +11,7 @@ import android.util.Log;
 import android.widget.TextView;
 
 import com.example.sensing.CellInfo;
+import com.example.sensing.DataListener;
 import com.example.sensing.WiFiInfo;
 import com.example.sensing.sensor;
 
@@ -31,10 +32,16 @@ public class MainActivity extends AppCompatActivity {
         sr =  new sensor(this);
 //        sr.print();
 //        sensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
-        sr.startService();
+        sr.startService(new DataListener(){
 
-        wifiinfo = new WiFiInfo(this);
-        wifiinfo.getWiFiInfo();
+            @Override
+            public void onDataReceived() {
+//                Log.i("ssss","dddd");
+            }
+        });
+
+//        wifiinfo = new WiFiInfo(this);
+//        wifiinfo.getWiFiInfo();
 
 
     }
