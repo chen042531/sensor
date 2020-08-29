@@ -1,7 +1,5 @@
 package com.example.sensing;
 
-public class DataListener {
-    public void onDataReceived(){
-
-    };
+public interface DataListener {
+    public void onDataReceived();
 }

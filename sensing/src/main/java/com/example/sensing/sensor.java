@@ -1,6 +1,5 @@
 package com.example.sensing;
 
-import android.app.Activity;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -81,7 +80,7 @@ public class sensor implements SensorEventListener {
             sensorManager.registerListener(this, mPressure, sensorManager.SENSOR_DELAY_NORMAL);
         }
 
-        // Measures the ambient geomagnetic field for all three physical axes (x, y, z) in μT.
+        // Measures the ambient geomagnetic field for all three physical axes (x, y, z) in 弮T.
         Sensor mMagnetic = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
         if (mMagnetic == null){
             //No mMagnetic Sensor!
@@ -92,16 +91,17 @@ public class sensor implements SensorEventListener {
     public static void print(){
         Log.i("haha","gagagag");
     }
-    public void startService(DataListener dataListener) {
+    public void startService(DataListener dListener) {
         initBfRun();
         setSensor();
-        dataListener = dataListener;
+        dataListener = dListener;
     }
 
     public void stopService(SensorManager sensorManager) {
         // Accelerometer, Light, Proximity, Barometer, Magnetometer
         sensorManager.unregisterListener(this);
     }
+
 
     @Override
     public void onSensorChanged(final SensorEvent event) {
@@ -152,7 +152,7 @@ public class sensor implements SensorEventListener {
 //                        FileMaker.write(JsonParser.sensorInfoToJson("PRESSURE", ""+event.values[0]));
                 break;
 
-            case Sensor.TYPE_MAGNETIC_FIELD: // Measures the ambient geomagnetic field for all three physical axes (x, y, z) in μT.
+            case Sensor.TYPE_MAGNETIC_FIELD: // Measures the ambient geomagnetic field for all three physical axes (x, y, z) in 弮T.
                 float[] mValues = event.values;
                 if(Math.abs(magneticValuesTemp[0]-mValues[0])>=10 || Math.abs(magneticValuesTemp[1]-mValues[1])>=10 || Math.abs(magneticValuesTemp[2]-mValues[2])>=10){
                     magneticValuesTemp[0] = mValues[0];
@@ -232,7 +232,7 @@ public class sensor implements SensorEventListener {
 ////                        FileMaker.write(JsonParser.sensorInfoToJson("PRESSURE", ""+event.values[0]));
 //                        break;
 //
-//                    case Sensor.TYPE_MAGNETIC_FIELD: // Measures the ambient geomagnetic field for all three physical axes (x, y, z) in μT.
+//                    case Sensor.TYPE_MAGNETIC_FIELD: // Measures the ambient geomagnetic field for all three physical axes (x, y, z) in 弮T.
 //                        float[] mValues = event.values;
 //                        if(Math.abs(magneticValuesTemp[0]-mValues[0])>=10 || Math.abs(magneticValuesTemp[1]-mValues[1])>=10 || Math.abs(magneticValuesTemp[2]-mValues[2])>=10){
 //                            magneticValuesTemp[0] = mValues[0];
@@ -271,6 +271,11 @@ public class sensor implements SensorEventListener {
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
         // TODO Auto-generated method stub
+    }
+    public float getAccData() {
+        Log.i("ssss", String.valueOf(gSensorValuesTemp[0]));
+        return gSensorValuesTemp[0];
+
     }
 }
 //http://berniechenopenvpn.blogspot.com/2016/08/sensormanagerregisterlitener.html

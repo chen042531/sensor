@@ -11,6 +11,7 @@ import android.util.Log;
 import android.widget.TextView;
 
 import com.example.sensing.CellInfo;
+import com.example.sensing.DListener;
 import com.example.sensing.DataListener;
 import com.example.sensing.WiFiInfo;
 import com.example.sensing.sensor;
@@ -32,13 +33,18 @@ public class MainActivity extends AppCompatActivity {
         sr =  new sensor(this);
 //        sr.print();
 //        sensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
-        sr.startService(new DataListener(){
+        final TextView tv1 = (TextView)findViewById(R.id.textView2);
+
+        sr.startService(new DListener(sr,tv1){
 
             @Override
             public void onDataReceived() {
-//                Log.i("ssss","dddd");
+                Log.i("ssss","dddd");
+                String s = String.valueOf(sr.getAccData());
+                tv1.setText(s);
             }
         });
+
 
 //        wifiinfo = new WiFiInfo(this);
 //        wifiinfo.getWiFiInfo();
