@@ -89,7 +89,7 @@ public class sensor implements SensorEventListener {
         }
     }
     public static void print(){
-        Log.i("haha","gagagag");
+//        Log.i("haha","gagagag");
     }
     public void startService(DataListener dListener) {
         initBfRun();
@@ -120,7 +120,7 @@ public class sensor implements SensorEventListener {
                 gSensorValues[0] = values[0];
                 gSensorValues[1] = values[1];
                 gSensorValues[2] = values[2];
-                Log.i("kkkkk", String.valueOf("ACCELEROMETER"+gSensorValues[0]+","+gSensorValues[1]+","+gSensorValues[2]));
+//                Log.i("kkkkk", String.valueOf("ACCELEROMETER"+gSensorValues[0]+","+gSensorValues[1]+","+gSensorValues[2]));
 //
 
                 dataListener.onDataReceived();
@@ -273,7 +273,7 @@ public class sensor implements SensorEventListener {
         // TODO Auto-generated method stub
     }
     public float getAccData() {
-        Log.i("ssss", String.valueOf(gSensorValuesTemp[0]));
+//        Log.i("ssss", String.valueOf(gSensorValuesTemp[0]));
         return gSensorValuesTemp[0];
 
     }

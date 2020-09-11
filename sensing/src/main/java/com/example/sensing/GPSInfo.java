@@ -61,8 +61,8 @@ public class GPSInfo implements GpsStatus.Listener,LocationListener {
         if (locationListener != null) {
             locationListener.onLocationChanged( location );
         }
-        Log.i("gps", String.valueOf(userlocationG));
-        Log.i("gps", String.valueOf(userlocationN));
+        Log.i("gps_onLocationChanged", String.valueOf(userlocationG));
+        Log.i("gps_onLocationChanged", String.valueOf(userlocationN));
     }
 
     @Override
@@ -90,6 +90,7 @@ public class GPSInfo implements GpsStatus.Listener,LocationListener {
 //                }
 //            }).start();
             locationListener.onProviderEnabled(provider);
+            Log.i("gps", String.valueOf(provider));
         }
     }
 
@@ -104,6 +105,7 @@ public class GPSInfo implements GpsStatus.Listener,LocationListener {
 //                }
 //            }).start();
             locationListener.onProviderEnabled(provider);
+
         }
     }
 
@@ -163,6 +165,7 @@ public class GPSInfo implements GpsStatus.Listener,LocationListener {
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             userlocationG = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
             userlocationN = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
             Log.i("gps", "String.valueOf(userlocationG)");
             Log.i("gps", String.valueOf(userlocationG));

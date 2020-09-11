@@ -59,7 +59,8 @@ public class WiFiInfo {
 
         // need checked , pei-yu 0206/2018
         servingLevel = String.valueOf(wifiInfo.getRssi()); // Returns the received signal strength indicator of the current 802.11 network, in dBm.
-        Log.i("wifi",servingSSID+"  ,  "+servingBSSID);
+        Log.i("wifi",servingSSID+"  ,  "+servingBSSID+"  ,  "+servingMAC+"  ,  "+servingIP);
+
     }
 
     // For wifi frequency to channel

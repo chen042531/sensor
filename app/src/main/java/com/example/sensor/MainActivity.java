@@ -14,11 +14,14 @@ import android.util.Log;
 import android.widget.TextView;
 
 import com.example.sensing.CellInfo;
+import com.example.sensing.CellularInfo;
 import com.example.sensing.DListener;
 import com.example.sensing.DataListener;
 import com.example.sensing.GPSInfo;
+import com.example.sensing.PhoneState;
 import com.example.sensing.WiFiInfo;
 import com.example.sensing.sensor;
+import com.example.sensing.GPSInfo;
 
 import static com.example.sensing.sensor.gSensorValues;
 import static com.example.sensing.sensor.tt;
@@ -29,7 +32,8 @@ public class MainActivity extends AppCompatActivity {
     private sensor sr ;
     private GPSInfo gps;
     private WiFiInfo wifiinfo;
-    private CellInfo cellInfo         ;
+    private CellularInfo cell;
+    private PhoneState phone;
     public  TextView text;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,14 +64,23 @@ public class MainActivity extends AppCompatActivity {
                 tv1.setText(s);
             }
         });
+
         gps = new GPSInfo(this);
+        Log.i("gps_enable", String.valueOf(GPSInfo.checkGPSalive()));
         gps.startGPS(this);
-//        Thread.sleep(8000);
         gps.getGPS(this);
 
 
-//        wifiinfo = new WiFiInfo(this);
-//        wifiinfo.getWiFiInfo();
+        wifiinfo = new WiFiInfo(this);
+        wifiinfo.getWiFiInfo();
+
+
+        cell = new CellularInfo(this);
+        cell.startService();
+
+        phone = new PhoneState(this);
+        Log.i("phone",phone.cpuUti());
+
 
     }
     public static boolean hasPermissions(Context context, String... permissions) {

@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.hardware.SensorManager;
 import android.os.Build;
 import android.telephony.CellInfo;
 import android.telephony.CellInfoLte;
@@ -16,6 +17,8 @@ import androidx.core.content.ContextCompat;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
+
+import static android.content.Context.SENSOR_SERVICE;
 
 public class CellularInfo extends PhoneStateListener {
     private long curTestTime = 0, preTestTime = 0;
@@ -42,7 +45,8 @@ public class CellularInfo extends PhoneStateListener {
     private TelephonyManager teleManager;
 
     public CellularInfo(Context context) {
-        serviceContext = new WeakReference<>(context);
+        this.serviceContext = new WeakReference<>(context);
+        this.teleManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);;
     }
     public static void calculateAvg() {
         if (passCellNum != 0) {
@@ -60,6 +64,7 @@ public class CellularInfo extends PhoneStateListener {
             cellInfoList = teleManager.getAllCellInfo();
         }
 
+        Log.i("cell", String.valueOf(cellInfoList));
         if (cellInfoList != null) {
             for (CellInfo cellInfo : cellInfoList) {
                 if (cellInfo.isRegistered()) {
@@ -166,7 +171,7 @@ public class CellularInfo extends PhoneStateListener {
 
     }
 
-    private void initBfRun() {
+    public void initBfRun() {
         preTestTime = System.currentTimeMillis();
 
         lteCellID = 0;
@@ -199,9 +204,9 @@ public class CellularInfo extends PhoneStateListener {
         ttlCellResidenceTime = 0;
     }
 
-    public void startService(TelephonyManager teleManger1) {
+    public void startService() {
         initBfRun();
-        teleManager = teleManger1;
+
         teleManager.listen(this, CellularInfo.LISTEN_SIGNAL_STRENGTHS);
     }
 
