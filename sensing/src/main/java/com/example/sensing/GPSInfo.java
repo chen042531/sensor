@@ -1,3 +1,5 @@
+package com.example.sensing;
+
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -11,8 +13,6 @@ import android.util.Log;
 
 import androidx.core.content.ContextCompat;
 
-import java.lang.ref.WeakReference;
-
 public class GPSInfo implements GpsStatus.Listener,LocationListener {
 
     private final Context mContext;
@@ -24,7 +24,7 @@ public class GPSInfo implements GpsStatus.Listener,LocationListener {
     public static Long updateTimeG=0L,updateTimeN=0L,updateTimeS;
     public static String updateTimeStampG ="unknown",updateTimeStampN ="unknown";
     public static GpsStatus gpsStatus = null;
-
+    public DataListener dataListener;
 
 
     public GPSInfo(Context mContext) {
@@ -61,6 +61,8 @@ public class GPSInfo implements GpsStatus.Listener,LocationListener {
         if (locationListener != null) {
             locationListener.onLocationChanged( location );
         }
+        Log.i("gps", String.valueOf(userlocationG));
+        Log.i("gps", String.valueOf(userlocationN));
     }
 
     @Override
@@ -145,7 +147,7 @@ public class GPSInfo implements GpsStatus.Listener,LocationListener {
         return 0;
     }
     public void startGPS(Context context) {
-
+//        dataListener = dListener;
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
 
@@ -157,13 +159,17 @@ public class GPSInfo implements GpsStatus.Listener,LocationListener {
     }
 
 
-    public void getGPS(Context context) {
+    public Location getGPS(Context context) {
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             userlocationG = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             userlocationN = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-        }
+            Log.i("gps", "String.valueOf(userlocationG)");
+            Log.i("gps", String.valueOf(userlocationG));
+            Log.i("gps", String.valueOf(userlocationN));
 
+        }
+        return userlocationN;
     }
     public void stopGPS() {
         locationManager.removeUpdates(GPSInfo.this);
