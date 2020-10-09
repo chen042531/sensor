@@ -17,8 +17,7 @@ public class DListener implements DataListener{
     }
     @Override
     public void onDataReceived() {
-//        Log.i("ssss","dddd");
-//        observerable.getAccData();
+
 
     }
 }

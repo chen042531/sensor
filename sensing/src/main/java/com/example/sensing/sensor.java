@@ -5,10 +5,15 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Handler;
 import android.util.Log;
 import android.widget.TextView;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import static android.content.Context.SENSOR_SERVICE;
+import static java.util.Calendar.SECOND;
 
 public class sensor implements SensorEventListener {
 
@@ -36,8 +41,12 @@ public class sensor implements SensorEventListener {
     }
 
 
+    private Timer mTimer;
+    private TimerTask mTimerTask;
+    private Handler mHandler;
+    private sensor sensor;
     private  void initBfRun() {
-
+        sensor = this;
         gSensorValues[0] = gSensorValues[1] = gSensorValues[2] = 10;
         magneticValues[0] = magneticValues[1] = magneticValues[2] = 0;
         orienValue[0] = orienValue[1] = orienValue[2] = 0;
@@ -49,12 +58,12 @@ public class sensor implements SensorEventListener {
         orienValueTemp[0] = orienValueTemp[1] = orienValueTemp[2] = 0;
     }
 
-    protected void setSensor() {
+    protected void setSensor(int interval) {
         Sensor mAccelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         if (mAccelerometer == null){
             //No Accelerometer Sensor!
         } else{
-            sensorManager.registerListener(this, mAccelerometer, sensorManager.SENSOR_DELAY_NORMAL);
+            sensorManager.registerListener(this, mAccelerometer, interval,interval);
         }
 
         Sensor mProximity = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
@@ -93,7 +102,29 @@ public class sensor implements SensorEventListener {
     }
     public void startService(DataListener dListener) {
         initBfRun();
-        setSensor();
+        setSensor(3000000);
+//        sensorManager.unregisterListener(sensor);
+//        setSensor(500000);
+        mHandler = new Handler();
+        mTimer = new Timer();
+
+        mTimerTask = new TimerTask() {
+            @Override
+            public void run() {
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        sensorManager.unregisterListener(sensor);
+                        setSensor(500000);
+//
+                        Log.i("start","start");
+
+
+                    }
+                });
+            }
+        };
+        mTimer.schedule(mTimerTask, 10000);
         dataListener = dListener;
     }
 
