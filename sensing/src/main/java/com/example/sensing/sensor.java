@@ -103,6 +103,7 @@ public class sensor implements SensorEventListener {
     public void startService(DataListener dListener) {
         initBfRun();
         setSensor(3000000);
+        Log.i("tt_start","3000start");
 //        sensorManager.unregisterListener(sensor);
 //        setSensor(500000);
         mHandler = new Handler();
@@ -116,15 +117,16 @@ public class sensor implements SensorEventListener {
                     public void run() {
                         sensorManager.unregisterListener(sensor);
                         setSensor(500000);
+                        Log.i("tt_start","500start");
 //
-                        Log.i("start","start");
+
 
 
                     }
                 });
             }
         };
-        mTimer.schedule(mTimerTask, 10000);
+        mTimer.schedule(mTimerTask, 100000);
         dataListener = dListener;
     }
 

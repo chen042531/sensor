@@ -56,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
         final TextView tv1 = (TextView)findViewById(R.id.textView2);
 
         sr.startService(new DListener(sr,tv1){
-
             @Override
             public void onDataReceived() {
                 Log.i("ssss","dddd");
