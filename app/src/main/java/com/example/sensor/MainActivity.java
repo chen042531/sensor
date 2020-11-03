@@ -25,6 +25,10 @@ import com.example.sensing.WiFiInfo;
 import com.example.sensing.sensor;
 import com.example.sensing.GPSInfo;
 import com.example.sensing.sendData;
+import com.example.sensing.writeFile;
+
+import java.io.IOException;
+
 import static com.example.sensing.sensor.gSensorValues;
 import static com.example.sensing.sensor.tt;
 
@@ -37,8 +41,15 @@ public class MainActivity extends AppCompatActivity {
     private CellularInfo cell;
     private PhoneState phone;
     private sendData s;
+    private writeFile write_file;
     public  TextView text;
     private float start, end;
+
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +59,8 @@ public class MainActivity extends AppCompatActivity {
         String[] PERMISSIONS = {
                 android.Manifest.permission.ACCESS_COARSE_LOCATION,
                 android.Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
         };
 
         if (!hasPermissions(this, PERMISSIONS)) {
@@ -90,6 +103,12 @@ public class MainActivity extends AppCompatActivity {
         phone = new PhoneState(this);
         Log.i("phone",phone.cpuUti());
 
+
+        try {
+            write_file = new writeFile(this);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         s = new sendData(this);
 
         s.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);

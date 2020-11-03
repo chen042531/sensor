@@ -1,43 +1,35 @@
 package com.example.sensing;
 
+import android.content.Context;
+import android.util.Log;
+
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class writeFile {
     FileOutputStream fop = null;
     File file;
     String content = "123123";
-
-//  try {
-//        File sdcard = Environment.getExternalStorageDirectory();
-//        file = new File(sdcard, context.getResources().getString(R.string.app_name)+"Log.txt"); //輸出檔案位置
-//        Log.i("Write File:", file + "");
-//        fop = new FileOutputStream(file);
-//
-//        if (!file.exists()) { // 如果檔案不存在，建立檔案
-//            file.createNewFile();
-//        }
-//
-//        byte[] contentInBytes = content.getBytes();// 取的字串內容bytes
-//
-//        fop.write(contentInBytes); //輸出
-//        fop.flush();
-//        fop.close();
-//
-//        Toast.makeText(context, "輸出完成", Toast.LENGTH_LONG).show();
-//
-//    } catch (IOException e) {
-//        Log.i("Write E:", e + "");
-//        e.printStackTrace();
-//    } finally {
-//        try {
-//            if (fop != null) {
-//                fop.close();
-//            }
-//        } catch (IOException e) {
-//            Log.i("Write IOException", e + "");
-//            e.printStackTrace();
-//        }
-//    }
-//}
+    public Context mContext;
+//    String filePath = "/data/com.example.sensor/logs/fileName_test";
+//    public void writeFile(String fileName,String writestr)
+    public writeFile(Context mContext) throws IOException {
+        this.mContext = mContext;
+        try{
+//            FileWriter fileWriter = new FileWriter("ff", true);
+            FileOutputStream fout = mContext.openFileOutput("example.json", MODE_PRIVATE);
+            byte [] bytes = content.getBytes();
+            fout.write(bytes);
+//            fout.close();
+            Log.d("writefile", "writefile");
+        }
+        catch(Exception e){
+            e.printStackTrace();
+            Log.d("writefile", "gg");
+        }
+    }
 }
