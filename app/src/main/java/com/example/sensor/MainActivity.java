@@ -7,10 +7,12 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.hardware.SensorManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.telephony.gsm.GsmCellLocation;
 import android.util.Log;
+import android.util.TimingLogger;
 import android.widget.TextView;
 
 import com.example.sensing.CellInfo;
@@ -22,7 +24,7 @@ import com.example.sensing.PhoneState;
 import com.example.sensing.WiFiInfo;
 import com.example.sensing.sensor;
 import com.example.sensing.GPSInfo;
-
+import com.example.sensing.sendData;
 import static com.example.sensing.sensor.gSensorValues;
 import static com.example.sensing.sensor.tt;
 
@@ -34,7 +36,9 @@ public class MainActivity extends AppCompatActivity {
     private WiFiInfo wifiinfo;
     private CellularInfo cell;
     private PhoneState phone;
+    private sendData s;
     public  TextView text;
+    private float start, end;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,17 +73,26 @@ public class MainActivity extends AppCompatActivity {
         gps.startGPS(this);
         gps.getGPS(this);
 
+        start = System.currentTimeMillis();
 
         wifiinfo = new WiFiInfo(this);
         wifiinfo.getWiFiInfo();
-
-
-        cell = new CellularInfo(this);
-        cell.startService();
+        Log.i("gps_enable", String.valueOf(GPSInfo.checkGPSalive()));
+        Log.i("gps_enable", String.valueOf(GPSInfo.checkGPSalive()));
+        end =  System.currentTimeMillis();
+        Log.i("TimeTest", String.valueOf(start));
+        Log.i("TimeTest", String.valueOf(end));
+        Log.i("TimeTest", String.valueOf((System.currentTimeMillis()-start)/1000000)+ "mS\n");
+//
+//        cell = new CellularInfo(this);
+//        cell.startService();
 
         phone = new PhoneState(this);
         Log.i("phone",phone.cpuUti());
 
+        s = new sendData(this);
+
+        s.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
     }
     public static boolean hasPermissions(Context context, String... permissions) {
