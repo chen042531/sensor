@@ -17,11 +17,11 @@ public class background  extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d("service_start","start");
+        Log.d("haha_service_start","start");
         new Handler().postDelayed(new Runnable() {
                                       @Override
                                       public void run() {
-                                          Log.d("service_start","ok");
+                                          Log.d("haha_service_start","ok");
                                       }
                                   }, 3000);
         return  START_NOT_STICKY;

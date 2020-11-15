@@ -22,6 +22,7 @@ import com.example.sensing.GPSInfo;
 import com.example.sensing.PhoneState;
 import com.example.sensing.WiFiInfo;
 import com.example.sensing.sensor;
+import com.example.sensing.sensingGO;
 import com.example.sensing.GPSInfo;
 
 import back.background;
@@ -52,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         if (!hasPermissions(this, PERMISSIONS)) {
             ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
         }
-        startService(new Intent(this, background.class));
+//        startService(new Intent(this, background.class));
         sr =  new sensor(this);
 //        sr.print();
 //        sensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
@@ -73,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
 //        gps.startGPS(this);
 //        gps.getGPS(this);
 
+        new sensingGO(this,"haha");
 
         wifiinfo = new WiFiInfo(this);
         wifiinfo.getWiFiInfo();
