@@ -5,6 +5,7 @@ import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.SensorManager;
 import android.os.Bundle;
@@ -22,6 +23,8 @@ import com.example.sensing.PhoneState;
 import com.example.sensing.WiFiInfo;
 import com.example.sensing.sensor;
 import com.example.sensing.GPSInfo;
+
+import back.background;
 
 import static com.example.sensing.sensor.gSensorValues;
 import static com.example.sensing.sensor.tt;
@@ -49,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         if (!hasPermissions(this, PERMISSIONS)) {
             ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
         }
-
+        startService(new Intent(this, background.class));
         sr =  new sensor(this);
 //        sr.print();
 //        sensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
@@ -58,27 +61,28 @@ public class MainActivity extends AppCompatActivity {
         sr.startService(new DListener(sr,tv1){
             @Override
             public void onDataReceived() {
-                Log.i("ssss","dddd");
-                String s = String.valueOf(sr.getAccData());
-                tv1.setText(s);
+//                Log.i("ssss","dddd");
+                Log.i("mainsensor", "sensor: "+sr.getData());
+//                String s = String.valueOf(sr.getData()[1]);
+//                tv1.setText(s);
             }
         });
 
-        gps = new GPSInfo(this);
-        Log.i("gps_enable", String.valueOf(GPSInfo.checkGPSalive()));
-        gps.startGPS(this);
-        gps.getGPS(this);
+//        gps = new GPSInfo(this);
+//        Log.i("gps_enable", String.valueOf(GPSInfo.checkGPSalive()));
+//        gps.startGPS(this);
+//        gps.getGPS(this);
 
 
         wifiinfo = new WiFiInfo(this);
         wifiinfo.getWiFiInfo();
-
-
-        cell = new CellularInfo(this);
-        cell.startService();
-
-        phone = new PhoneState(this);
-        Log.i("phone",phone.cpuUti());
+//
+//
+//        cell = new CellularInfo(this);
+//        cell.startService();
+//
+//        phone = new PhoneState(this);
+//        Log.i("phone",phone.cpuUti());
 
 
     }
