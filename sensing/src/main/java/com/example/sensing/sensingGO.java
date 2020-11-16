@@ -16,11 +16,5 @@ public class sensingGO {
 //    public type(String type) {
 //        this.mContext = mContext;
 //    }
-//    收集資料
 
-
-//    寫入資料
-
-
-//    上傳資料
 }

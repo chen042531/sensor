@@ -1,97 +1,146 @@
 package com.example.sensing;
 
 
+import android.Manifest;
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.hardware.SensorManager;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 import android.widget.TextView;
+
+import androidx.core.content.ContextCompat;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.lang.ref.WeakReference;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import static android.content.Context.ACTIVITY_SERVICE;
 import static android.content.Context.SENSOR_SERVICE;
 
-public class PhoneState  {
-    public static double ram_uti;
-    public Context mContext;
-    private ActivityManager actManager;
-    public PhoneState(Context mContext) {
-        this.mContext = mContext;
-        this.actManager = (ActivityManager)mContext.getSystemService(ACTIVITY_SERVICE);
+public class PhoneState  extends PhoneStateListener {
+    public static String phoneState = StateVar.IDLE; //IDLE, OFFHOOK, RINGING
+    public static String callState = StateVar.IDLE; //Callout, Callin, RINGING
+    public static String callID = "null";
+    public static String startCallTime, endCallTime;
+
+    public static int callNum = 0, callExcessNum = 0;
+    public static long callStartAt = 0, callHoldingTime = 0, excessLife = 0;
+    public static double avgCallHoldTime = 0, avgExcessLife = 0;
+    public static double ttlCallHoldTime = 0, ttlExcessLife = 0;
+    public static boolean FirstCallCell = false;
+
+    SimpleDateFormat sdf;
+    Date LogDate;
+    private TelephonyManager teleManger;
+
+    private static Date LogTime;
+    private static SimpleDateFormat logTimeSdf = new SimpleDateFormat("HH:mm:ss:SSS");
+
+//    private JsonParser JsonParser = null;
+
+    private WeakReference<Context> serviceContext;
+
+    public PhoneState (Context context) {
+        serviceContext = new WeakReference<>(context);
     }
-    public void ram() {
-        ActivityManager.MemoryInfo memInfo = new ActivityManager.MemoryInfo();
-        actManager.getMemoryInfo(memInfo);
-        long totalMemory = memInfo.totalMem;
-        long Free = memInfo.availMem;
-        long Busy = totalMemory - Free;
-        DecimalFormat df = new DecimalFormat("##.00");
-        ram_uti = (double) Busy / (double) totalMemory;
-        ram_uti = Double.parseDouble(df.format(ram_uti));
-        /*Log.d("LINYIHAO", "Total memory: " + bytesToHuman(totalMemory)
-                                + " Free: " + bytesToHuman(Free)
-                                + " Busy: " + bytesToHuman(Busy));*/
-    }
-    public static String cpuUti() {
-        double cpu_uti = readUsage();
-        DecimalFormat df = new DecimalFormat("##.00");
-        cpu_uti = Double.parseDouble(df.format(cpu_uti));
-        return String.valueOf(cpu_uti);
-    }
-    public static String displayPhoneState() {
+//
+//    public void setJsonParser(JsonParser json) {
+//        JsonParser = json;
+//    }
 
-        double cpu_uti = readUsage();
-        DecimalFormat df = new DecimalFormat("##.00");
-        cpu_uti = Double.parseDouble(df.format(cpu_uti));
-        return "\t\"CPU\": " + cpu_uti
-                + "\n\t\"RAM\": " + ram_uti;
-    }
-    // Ref: http://www.linuxhowtos.org/System/procstat.htm
-    private static float readUsage() {
-        try {
-            RandomAccessFile reader = new RandomAccessFile("/proc/stat", "r");
-            String load = reader.readLine();
+    @Override
+    public void onCallStateChanged(final int state, String incomingNumber) {
+        super.onCallStateChanged(state, incomingNumber);
+        //Writing file in new thread 2018/10/07
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                LogTime = new Date();
+                LogDate = new Date();
+                sdf = new SimpleDateFormat("yyyyMMddHHmm");
+                logTimeSdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS");
+                switch (state) {
+                    case TelephonyManager.CALL_STATE_IDLE:
+                        // OFFHOOK: At least one call exists that is dialing, active, or on hold, and no calls are ringing or waiting.
+                        if (phoneState.equals(StateVar.OFFHOOK)) {
+                            callHoldingTime = System.currentTimeMillis() - callStartAt;
+                            ttlCallHoldTime = ttlCallHoldTime + callHoldingTime;
+                        }
+                        phoneState = StateVar.IDLE;
+                        phoneState = StateVar.IDLE;
+                        callState = StateVar.IDLE;
+                        FirstCallCell = false;
+                        endCallTime = logTimeSdf.format(LogDate);
+//                        FileMaker.write(JsonParser.phoneStateToJson(serviceContext.get()));
+                        break;
 
-            String[] toks = load.split(" ");
+                    case TelephonyManager.CALL_STATE_OFFHOOK:
+                        if (phoneState.equals(StateVar.IDLE)) {
+                            callState = StateVar.Callout;
+                        }
+                        if (phoneState.equals(StateVar.RINGING)) {
+                            callState = StateVar.Callin;
+                        }
+                        callNum = callNum + 1;
+                        callStartAt = System.currentTimeMillis();
+                        FirstCallCell = true;
+                        phoneState = StateVar.OFFHOOK;
+                        startCallTime = logTimeSdf.format(LogDate);
 
-            // Log.d("/proc", "/stat: " + load);
-            // Log.d("0202***", "file tokens: " + "1: " + toks[1] + "," + " 2: " + toks[2] + ","
-            //        + " 3: " + toks[3] + "," + " 4: " + toks[4] + "," + " 5: " + toks[5] + ","
-            //        + " 6: " + toks[6] + " 7: " + toks[7] + "," + " 8: " + toks[8]);
+//                        FileMaker.write(JsonParser.phoneStateToJson(serviceContext.get()));
+                        if (ContextCompat.checkSelfPermission(serviceContext.get(), Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
+                            callID = teleManger.getDeviceId().concat((sdf.format(LogDate)));//hank add callID 2016/09/12
+                        }
+                        break;
 
-
-            long idle1 = Long.parseLong(toks[5]);
-            long cpu1 = Long.parseLong(toks[2]) + Long.parseLong(toks[3]) + Long.parseLong(toks[4])
-                    + Long.parseLong(toks[6]) + Long.parseLong(toks[7]) + Long.parseLong(toks[8]);
-
-            try {
-                Thread.sleep(360);
-            } catch (Exception e) {
+                    case TelephonyManager.CALL_STATE_RINGING:
+                        phoneState = StateVar.RINGING;
+                        callState = StateVar.RINGING;
+                        break;
+                }
             }
+        }).start();
 
-            reader.seek(0);
-            load = reader.readLine();
-            reader.close();
-
-            toks = load.split(" ");
-
-            long idle2 = Long.parseLong(toks[5]);
-            long cpu2 = Long.parseLong(toks[2]) + Long.parseLong(toks[3]) + Long.parseLong(toks[4])
-                    + Long.parseLong(toks[6]) + Long.parseLong(toks[7]) + Long.parseLong(toks[8]);
-
-            if (((cpu2 + idle2) - (cpu1 + idle1)) <= 0)
-                return (float) 0;
-            else
-                return (float) (cpu2 - cpu1) / ((cpu2 + idle2) - (cpu1 + idle1));
-
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-
-        return 0;
     }
+
+    public static void calculateAvg() {
+        if (callNum != 0) {
+            avgCallHoldTime = ttlCallHoldTime / callNum;
+        }
+        if (callExcessNum != 0) {
+            avgExcessLife = ttlExcessLife / callExcessNum;
+        }
+    }
+
+    private void initBfRun() {
+        avgCallHoldTime = 0;
+        avgExcessLife = 0;
+        callNum = 0;
+        callExcessNum = 0;
+        callStartAt = 0;
+        callHoldingTime = 0;
+        excessLife = 0;
+        ttlCallHoldTime = 0;
+        ttlExcessLife = 0;
+        FirstCallCell = false;
+    }
+
+    public void startService(TelephonyManager tm1) {
+        initBfRun();
+        teleManger = tm1;
+        teleManger.listen(this, edu.nctu.wirelab.sensinggo.Measurement.PhoneState.LISTEN_CALL_STATE); // idle, ringing, offhook
+    }
+
+    public void stopService(TelephonyManager tm1) {
+        teleManger = tm1;
+        teleManger.listen(this);
+    }
+
 
 
 }

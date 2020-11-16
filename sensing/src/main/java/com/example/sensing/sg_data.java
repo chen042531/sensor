@@ -61,5 +61,5 @@ public class sg_data {
 
 
 //    Event":"AppsInfo","LastTime":174145,"AppsInfo":[{"AppName":"edu.nctu.wirelab.sensinggo","TotalTx":204940383,"TotalRx":79512950,"DeltaTx":336,"DeltaRx":0}],"AllAppsTxBytes(MB)":"2870.36","AllAppsRxBytes(MB)":"24990.77"}
-            ,
+
 }
