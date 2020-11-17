@@ -133,12 +133,12 @@ public class PhoneState  extends PhoneStateListener {
     public void startService(TelephonyManager tm1) {
         initBfRun();
         teleManger = tm1;
-        teleManger.listen(this, edu.nctu.wirelab.sensinggo.Measurement.PhoneState.LISTEN_CALL_STATE); // idle, ringing, offhook
+        teleManger.listen(this, LISTEN_CALL_STATE); // idle, ringing, offhook
     }
 
     public void stopService(TelephonyManager tm1) {
         teleManger = tm1;
-        teleManger.listen(this);
+        teleManger.listen(this,LISTEN_NONE);
     }
 
 

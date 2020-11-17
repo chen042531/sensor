@@ -85,10 +85,7 @@ public static String screen_state = "on";
     public static double ram_uti;
     public Context mContext;
     private ActivityManager actManager;
-    public PhoneState(Context mContext) {
-        this.mContext = mContext;
-        this.actManager = (ActivityManager)mContext.getSystemService(ACTIVITY_SERVICE);
-    }
+
     public void ram() {
         ActivityManager.MemoryInfo memInfo = new ActivityManager.MemoryInfo();
         actManager.getMemoryInfo(memInfo);
