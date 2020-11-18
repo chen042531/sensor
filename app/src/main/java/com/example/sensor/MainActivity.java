@@ -3,32 +3,20 @@ package com.example.sensor;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
-import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.telephony.TelephonyManager;
-import android.telephony.gsm.GsmCellLocation;
 import android.util.Log;
 import android.widget.TextView;
 
-import com.example.sensing.CellInfo;
-import com.example.sensing.CellularInfo;
-import com.example.sensing.DListener;
-import com.example.sensing.DataListener;
-import com.example.sensing.GPSInfo;
-import com.example.sensing.PhoneState;
-import com.example.sensing.WiFiInfo;
-import com.example.sensing.sensor;
-import com.example.sensing.sensingGO;
-import com.example.sensing.GPSInfo;
-
-import back.background;
-
-import static com.example.sensing.sensor.gSensorValues;
-import static com.example.sensing.sensor.tt;
+import com.example.sensing.Measurement.CellularInfo;
+import com.example.sensing.Data.DataListener;
+import com.example.sensing.Measurement.GPSInfo;
+import com.example.sensing.Measurement.PhoneState;
+import com.example.sensing.Measurement.WiFiInfo;
+import com.example.sensing.Measurement.sensor;
+import com.example.sensing.SensingGO;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -59,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
 //        sensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
         final TextView tv1 = (TextView)findViewById(R.id.textView2);
 
-        sr.startService(new DListener(sr,tv1){
+        sr.startService(new DataListener(sr,tv1){
             @Override
             public void onDataReceived() {
 //                Log.i("ssss","dddd");
@@ -74,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
 //        gps.startGPS(this);
 //        gps.getGPS(this);
 
-        new sensingGO(this,"haha");
+        new SensingGO(this,"haha");
 
         wifiinfo = new WiFiInfo(this);
         wifiinfo.getWiFiInfo();

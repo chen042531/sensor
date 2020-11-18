@@ -1,4 +1,4 @@
-package com.example.sensing;
+package com.example.sensing.Measurement;
 
 import android.content.Context;
 import android.hardware.SensorManager;

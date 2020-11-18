@@ -1,4 +1,4 @@
-package com.example.sensing;
+package com.example.sensing.Measurement;
 
 
 import android.Manifest;
@@ -23,8 +23,8 @@ import static android.content.Context.ACTIVITY_SERVICE;
 import static android.content.Context.SENSOR_SERVICE;
 
 public class PhoneState  extends PhoneStateListener {
-    public static String phoneState = StateVar.IDLE; //IDLE, OFFHOOK, RINGING
-    public static String callState = StateVar.IDLE; //Callout, Callin, RINGING
+    public static String phoneState = "IDLE"; //IDLE, OFFHOOK, RINGING
+    public static String callState = "IDLE"; //Callout, ""Callin"", RINGING
     public static String callID = "null";
     public static String startCallTime, endCallTime;
 
@@ -67,29 +67,29 @@ public class PhoneState  extends PhoneStateListener {
                 switch (state) {
                     case TelephonyManager.CALL_STATE_IDLE:
                         // OFFHOOK: At least one call exists that is dialing, active, or on hold, and no calls are ringing or waiting.
-                        if (phoneState.equals(StateVar.OFFHOOK)) {
+                        if (phoneState.equals("OFFHOOK")) {
                             callHoldingTime = System.currentTimeMillis() - callStartAt;
                             ttlCallHoldTime = ttlCallHoldTime + callHoldingTime;
                         }
-                        phoneState = StateVar.IDLE;
-                        phoneState = StateVar.IDLE;
-                        callState = StateVar.IDLE;
+                        phoneState = "IDLE";
+                        phoneState = "IDLE";
+                        callState = "IDLE";
                         FirstCallCell = false;
                         endCallTime = logTimeSdf.format(LogDate);
 //                        FileMaker.write(JsonParser.phoneStateToJson(serviceContext.get()));
                         break;
 
                     case TelephonyManager.CALL_STATE_OFFHOOK:
-                        if (phoneState.equals(StateVar.IDLE)) {
-                            callState = StateVar.Callout;
+                        if (phoneState.equals("IDLE")) {
+                            callState = "Callout";
                         }
-                        if (phoneState.equals(StateVar.RINGING)) {
-                            callState = StateVar.Callin;
+                        if (phoneState.equals("RINGING")) {
+                            callState = "Callin";
                         }
                         callNum = callNum + 1;
                         callStartAt = System.currentTimeMillis();
                         FirstCallCell = true;
-                        phoneState = StateVar.OFFHOOK;
+                        phoneState = "OFFHOOK";
                         startCallTime = logTimeSdf.format(LogDate);
 
 //                        FileMaker.write(JsonParser.phoneStateToJson(serviceContext.get()));
@@ -99,8 +99,8 @@ public class PhoneState  extends PhoneStateListener {
                         break;
 
                     case TelephonyManager.CALL_STATE_RINGING:
-                        phoneState = StateVar.RINGING;
-                        callState = StateVar.RINGING;
+                        phoneState = "RINGING";
+                        callState = "RINGING";
                         break;
                 }
             }

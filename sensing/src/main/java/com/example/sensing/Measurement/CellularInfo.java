@@ -1,10 +1,9 @@
-package com.example.sensing;
+package com.example.sensing.Measurement;
 
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.hardware.SensorManager;
 import android.os.Build;
 import android.telephony.CellInfo;
 import android.telephony.CellInfoLte;
@@ -17,8 +16,6 @@ import androidx.core.content.ContextCompat;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
-
-import static android.content.Context.SENSOR_SERVICE;
 
 public class CellularInfo extends PhoneStateListener {
     private long curTestTime = 0, preTestTime = 0;

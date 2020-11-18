@@ -1,4 +1,4 @@
-package com.example.sensing;
+package com.example.sensing.Measurement;
 
 import android.content.Context;
 import android.hardware.Sensor;
@@ -8,6 +8,8 @@ import android.hardware.SensorManager;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.TextView;
+
+import com.example.sensing.Data.DataListenerInterface;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -33,7 +35,7 @@ public class sensor implements SensorEventListener {
     private static float[] orienValueTemp = new float[3];
     public Context mContext;
     public static TextView tt;
-    public DataListener dataListener;
+    public DataListenerInterface dataListenerInterface;
     public sensor(Context mContext) {
         this.mContext = mContext;
         this.sensorManager = (SensorManager)mContext.getSystemService(SENSOR_SERVICE);
@@ -100,11 +102,11 @@ public class sensor implements SensorEventListener {
         }
     }
 
-    public void startService(DataListener dListener) {
+    public void startService(DataListenerInterface dListener) {
         initBfRun();
         setSensor(3000000);
 
-        dataListener = dListener;
+        dataListenerInterface = dListener;
     }
 
     public void stopService(SensorManager sensorManager) {
@@ -133,7 +135,7 @@ public class sensor implements SensorEventListener {
 //                Log.i("kkkkk", String.valueOf("ACCELEROMETER"+gSensorValues[0]+","+gSensorValues[1]+","+gSensorValues[2]));
 //
 
-                dataListener.onDataReceived();
+                dataListenerInterface.onDataReceived();
 //                tt.setText(String.valueOf("ACCELEROMETER"+gSensorValues[0]+","+gSensorValues[1]+","+gSensorValues[2]));
                 break;
 

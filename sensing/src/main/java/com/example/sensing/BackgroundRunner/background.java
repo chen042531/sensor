@@ -1,4 +1,4 @@
-package back;
+package com.example.sensing.BackgroundRunner;
 
 import android.app.Service;
 import android.content.Intent;
@@ -8,7 +8,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
-import com.example.sensing.TrafficSnapshot;
+import com.example.sensing.Measurement.TrafficSnapshot;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;

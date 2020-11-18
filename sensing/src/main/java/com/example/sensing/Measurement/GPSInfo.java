@@ -1,4 +1,4 @@
-package com.example.sensing;
+package com.example.sensing.Measurement;
 
 import android.Manifest;
 import android.content.Context;
@@ -13,6 +13,8 @@ import android.util.Log;
 
 import androidx.core.content.ContextCompat;
 
+import com.example.sensing.Data.DataListenerInterface;
+
 public class GPSInfo implements GpsStatus.Listener,LocationListener {
 
     private final Context mContext;
@@ -24,7 +26,7 @@ public class GPSInfo implements GpsStatus.Listener,LocationListener {
     public static Long updateTimeG=0L,updateTimeN=0L,updateTimeS;
     public static String updateTimeStampG ="unknown",updateTimeStampN ="unknown";
     public static GpsStatus gpsStatus = null;
-    public DataListener dataListener;
+    public DataListenerInterface dataListenerInterface;
 
 
     public GPSInfo(Context mContext) {

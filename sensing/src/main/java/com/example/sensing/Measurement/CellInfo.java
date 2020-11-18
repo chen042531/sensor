@@ -1,4 +1,4 @@
-package com.example.sensing;
+package com.example.sensing.Measurement;
 
 import android.Manifest;
 import android.app.ActivityManager;

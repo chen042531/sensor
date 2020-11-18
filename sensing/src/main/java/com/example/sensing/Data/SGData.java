@@ -1,6 +1,6 @@
-package com.example.sensing;
+package com.example.sensing.Data;
 
-public class sg_data {
+public class SGData {
 //    AppicationType
 //            ApplicationVersion
 //    APPVersion
