@@ -61,7 +61,7 @@ public class CellularInfo extends PhoneStateListener {
             cellInfoList = teleManager.getAllCellInfo();
         }
 
-        Log.i("cell", String.valueOf(cellInfoList));
+        Log.i("cellularInfo", String.valueOf(cellInfoList));
         if (cellInfoList != null) {
             for (CellInfo cellInfo : cellInfoList) {
                 if (cellInfo.isRegistered()) {
@@ -80,7 +80,7 @@ public class CellularInfo extends PhoneStateListener {
                             }
                         }
                         Log.d("012418: ", "LTE RSRQ " + lteCellRSRQ);
-
+                        Log.d("bbbbb: ", "LTE RSRQ " + nowCellID+","+ passCellNum+","+ stayCellAt+","+ ttlCellResidenceTime+",");
 
 
                         //Log.d(TagName, "LTE cellinfo");
@@ -92,7 +92,6 @@ public class CellularInfo extends PhoneStateListener {
 
                         // Gets the LTE cell identity: (returns 28-bit Cell Identity, Integer.MAX_VALUE if unknown)
                         lteCellID = ((CellInfoLte) cellInfo).getCellIdentity().getCi();
-                        Log.i("ffffffffffffffff", String.valueOf(lteCellID));
                         // Gets the LTE MCC: (returns 3-digit Mobile Country Code, 0..999, Integer.MAX_VALUE if unknown)
                         lteCellMCC = ((CellInfoLte) cellInfo).getCellIdentity().getMcc();
 
@@ -105,12 +104,7 @@ public class CellularInfo extends PhoneStateListener {
                         // Gets the LTE TAC: (returns 16-bit Tracking Area Code, Integer.MAX_VALUE if unknown)
                         lteCellTAC = ((CellInfoLte) cellInfo).getCellIdentity().getTac();
 
-                        /*Log.d(TagName, "SSL(CellInfoLte) RSRP:" + SIONAtCellRSRP +
-                                " cellID:" + lteCellID +
-                                " cellMcc:" + lteCellMCC +
-                                " cellMnc:" + lteCellMNC +
-                                " cellPci:" + lteCellPCI +
-                                " cellTac:" + lteCellTAC);*/
+
                     } else if (cellInfo instanceof CellInfoWcdma) {
                         cellInfoType = "Wcdma";
 
@@ -203,17 +197,11 @@ public class CellularInfo extends PhoneStateListener {
 
     public void startService() {
         initBfRun();
-
         teleManager.listen(this, CellularInfo.LISTEN_SIGNAL_STRENGTHS);
     }
 
-    public void autoStartService(TelephonyManager teleManger1) {
-        teleManager = teleManger1;
-        teleManager.listen(this, CellularInfo.LISTEN_SIGNAL_STRENGTHS);
-    }
+    public void stopService() {
 
-    public void stopService(TelephonyManager teleManger1) {
-        teleManager = teleManger1;
         teleManager.listen(this, CellularInfo.LISTEN_NONE);
     }
 }

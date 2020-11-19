@@ -18,4 +18,5 @@
         <service android:name="com.example.sensing.BackgroundRunner.background" android:enabled="true"/>
 
     </application>
+
 </manifest>

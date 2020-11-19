@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.app.ActivityManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.SensorManager;
 import android.os.Bundle;
@@ -27,6 +29,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
 
+import static android.os.BatteryManager.EXTRA_PLUGGED;
+
 public class MainActivity extends AppCompatActivity {
 
     private SensorManager sensorManager;
@@ -37,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private NetworkState networkstate;
     private PhoneState phoneState;
     private PhoneInfo phoneInfo;
+    private CellularInfo cellularInfo;
     public  TextView text;
 
     public HardwarePropertiesManager hardwarePropertiesManager;
@@ -65,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
             public void onDataReceived() {
 //                Log.i("ssss","dddd");
                 Log.i("mainsensor", "sensor: "+sr.getData());
+                Log.i("mainsensor", "sensor_dddd: "+sr.magneticValues[0]);
 //                String s = String.valueOf(sr.getData()[1]);
 //                tv1.setText(s);
             }
@@ -89,14 +95,13 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
         phoneInfo.ram();
 
         Log.i("cpu_vol", String.valueOf(phoneInfo.voltage));
         phoneState = new PhoneState(this);
-
-
+        phoneState.startService();
+        cellularInfo = new CellularInfo(this);
+        cellularInfo.startService();
 
 
     }

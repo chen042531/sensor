@@ -4,6 +4,7 @@ import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.BatteryManager;
 import android.util.Log;
 
@@ -39,6 +40,11 @@ public class PhoneInfo extends BroadcastReceiver {
 
     public PhoneInfo(Context mContext) {
         this.mContext = mContext;
+        IntentFilter intentFilter = new IntentFilter(Intent.ACTION_SCREEN_ON);
+        intentFilter.addAction(Intent.ACTION_SCREEN_OFF);
+        intentFilter.addAction(Intent.ACTION_BATTERY_CHANGED);
+        mContext.registerReceiver(this, intentFilter);
+
 //        this.sensorManager = (SensorManager)mContext.getSystemService(SENSOR_SERVICE);
     }
     @Override
@@ -56,7 +62,8 @@ public class PhoneInfo extends BroadcastReceiver {
         tmp = String.valueOf(intent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, 0) * 0.1);
         electricity = level / (double)scale * 100;
         voltage = intent.getIntExtra(BatteryManager.EXTRA_VOLTAGE, 10);
-
+        Log.i("onBattery", String.valueOf(electricity));
+        Log.i("onBattery", String.valueOf(temperature));
 
         String action = intent.getAction();
         if (Intent.ACTION_SCREEN_ON.equals(action)) {
@@ -65,6 +72,7 @@ public class PhoneInfo extends BroadcastReceiver {
         else if (Intent.ACTION_SCREEN_OFF.equals(action)) {
             screen_state = "off";
         }
+        Log.i("onBattery", String.valueOf(screen_state));
     }
 
 

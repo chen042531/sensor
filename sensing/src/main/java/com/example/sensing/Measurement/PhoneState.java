@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.hardware.SensorManager;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
@@ -43,15 +44,13 @@ public class PhoneState  extends PhoneStateListener {
 
 //    private JsonParser JsonParser = null;
 
-    private WeakReference<Context> serviceContext;
+    private Context mContext;
 
     public PhoneState (Context context) {
-        serviceContext = new WeakReference<>(context);
+
+        this.mContext = context;
+        teleManger = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
     }
-//
-//    public void setJsonParser(JsonParser json) {
-//        JsonParser = json;
-//    }
 
     @Override
     public void onCallStateChanged(final int state, String incomingNumber) {
@@ -76,15 +75,18 @@ public class PhoneState  extends PhoneStateListener {
                         callState = "IDLE";
                         FirstCallCell = false;
                         endCallTime = logTimeSdf.format(LogDate);
+                        Log.i("phoneState","IDLE");
 //                        FileMaker.write(JsonParser.phoneStateToJson(serviceContext.get()));
                         break;
 
                     case TelephonyManager.CALL_STATE_OFFHOOK:
                         if (phoneState.equals("IDLE")) {
                             callState = "Callout";
+                            Log.i("phoneState","Callout");
                         }
                         if (phoneState.equals("RINGING")) {
                             callState = "Callin";
+                            Log.i("phoneState","Callin");
                         }
                         callNum = callNum + 1;
                         callStartAt = System.currentTimeMillis();
@@ -93,7 +95,7 @@ public class PhoneState  extends PhoneStateListener {
                         startCallTime = logTimeSdf.format(LogDate);
 
 //                        FileMaker.write(JsonParser.phoneStateToJson(serviceContext.get()));
-                        if (ContextCompat.checkSelfPermission(serviceContext.get(), Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
+                        if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
                             callID = teleManger.getDeviceId().concat((sdf.format(LogDate)));//hank add callID 2016/09/12
                         }
                         break;
@@ -130,14 +132,14 @@ public class PhoneState  extends PhoneStateListener {
         FirstCallCell = false;
     }
 
-    public void startService(TelephonyManager tm1) {
+    public void startService() {
         initBfRun();
-        teleManger = tm1;
+
         teleManger.listen(this, LISTEN_CALL_STATE); // idle, ringing, offhook
     }
 
-    public void stopService(TelephonyManager tm1) {
-        teleManger = tm1;
+    public void stopService() {
+
         teleManger.listen(this,LISTEN_NONE);
     }
 
