@@ -3,30 +3,43 @@ package com.example.sensor;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.HardwarePropertiesManager;
 import android.util.Log;
 import android.widget.TextView;
 
 import com.example.sensing.Measurement.CellularInfo;
 import com.example.sensing.Data.DataListener;
-import com.example.sensing.Measurement.GPSInfo;
+import com.example.sensing.Measurement.LocationInfo;
+import com.example.sensing.Measurement.NetworkState;
+import com.example.sensing.Measurement.PhoneInfo;
 import com.example.sensing.Measurement.PhoneState;
 import com.example.sensing.Measurement.WiFiInfo;
 import com.example.sensing.Measurement.SensorInfo;
 import com.example.sensing.SensingGO;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.RandomAccessFile;
+
 public class MainActivity extends AppCompatActivity {
 
     private SensorManager sensorManager;
     private SensorInfo sr ;
-    private GPSInfo gps;
+    private LocationInfo gps;
     private WiFiInfo wifiinfo;
     private CellularInfo cell;
-    private PhoneState phone;
+    private NetworkState networkstate;
+    private PhoneState phoneState;
+    private PhoneInfo phoneInfo;
     public  TextView text;
+
+    public HardwarePropertiesManager hardwarePropertiesManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,8 +70,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        gps = new GPSInfo(this);
-        Log.i("gps_enable", String.valueOf(GPSInfo.checkGPSalive()));
+        gps = new LocationInfo(this);
+        Log.i("gps_enable", String.valueOf(LocationInfo.checkGPSalive()));
         gps.startGPS(this);
         gps.getGPS(this);
 
@@ -66,13 +79,24 @@ public class MainActivity extends AppCompatActivity {
 
         wifiinfo = new WiFiInfo(this);
         wifiinfo.getWiFiInfo();
-//
-//
-//        cell = new CellularInfo(this);
-//        cell.startService();
-//
-//        phone = new PhoneState(this);
-//        Log.i("phone",phone.cpuUti());
+
+        networkstate = new NetworkState(this);
+        networkstate.networkstateTest();
+
+        phoneInfo = new PhoneInfo(this);
+        try {
+            Log.i("cpu", String.valueOf(phoneInfo.cpuInfo()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        phoneInfo.ram();
+
+        Log.i("cpu_vol", String.valueOf(phoneInfo.voltage));
+        phoneState = new PhoneState(this);
+
+
 
 
     }

@@ -15,7 +15,7 @@ import androidx.core.content.ContextCompat;
 
 import com.example.sensing.Data.DataListenerInterface;
 
-public class GPSInfo implements GpsStatus.Listener,LocationListener {
+public class LocationInfo implements GpsStatus.Listener,LocationListener {
 
     private final Context mContext;
     private static LocationManager locationManager;
@@ -29,7 +29,7 @@ public class GPSInfo implements GpsStatus.Listener,LocationListener {
     public DataListenerInterface dataListenerInterface;
 
 
-    public GPSInfo(Context mContext) {
+    public LocationInfo(Context mContext) {
         this.mContext = mContext;
         locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
     }
@@ -141,8 +141,8 @@ public class GPSInfo implements GpsStatus.Listener,LocationListener {
                 ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
 
             this.getGPS(context);
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, GPSInfo.this, Looper.getMainLooper());
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, GPSInfo.this, Looper.getMainLooper());
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, LocationInfo.this, Looper.getMainLooper());
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, LocationInfo.this, Looper.getMainLooper());
         }
 
     }
@@ -162,6 +162,6 @@ public class GPSInfo implements GpsStatus.Listener,LocationListener {
         return userlocationN;
     }
     public void stopGPS() {
-        locationManager.removeUpdates(GPSInfo.this);
+        locationManager.removeUpdates(LocationInfo.this);
     }
 }
