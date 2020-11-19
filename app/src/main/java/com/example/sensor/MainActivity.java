@@ -64,15 +64,15 @@ public class MainActivity extends AppCompatActivity {
 //        sr.print();
 //        sensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
         final TextView tv1 = (TextView)findViewById(R.id.textView2);
-
+//        tv1.setText("jjjjjjjj");
         sr.startService(new DataListener(sr,tv1){
             @Override
             public void onDataReceived() {
 //                Log.i("ssss","dddd");
                 Log.i("mainsensor", "sensor: "+sr.getData());
                 Log.i("mainsensor", "sensor_dddd: "+sr.magneticValues[0]);
-//                String s = String.valueOf(sr.getData()[1]);
-//                tv1.setText(s);
+                String s = String.valueOf(sr.magneticValues[0]);
+                tv1.setText(s);
             }
         });
 
