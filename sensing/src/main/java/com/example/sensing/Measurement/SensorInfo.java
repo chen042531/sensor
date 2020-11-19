@@ -16,7 +16,7 @@ import java.util.TimerTask;
 
 import static android.content.Context.SENSOR_SERVICE;
 
-public class sensor implements SensorEventListener {
+public class SensorInfo implements SensorEventListener {
 
     private SensorManager sensorManager;
     public static float[] gSensorValues = new float[3]; // triaxial acceleration
@@ -34,9 +34,9 @@ public class sensor implements SensorEventListener {
     private static float[] magneticValuesTemp = new float[3];
     private static float[] orienValueTemp = new float[3];
     public Context mContext;
-    public static TextView tt;
+    public  TextView tt;
     public DataListenerInterface dataListenerInterface;
-    public sensor(Context mContext) {
+    public SensorInfo(Context mContext) {
         this.mContext = mContext;
         this.sensorManager = (SensorManager)mContext.getSystemService(SENSOR_SERVICE);
     }
@@ -45,9 +45,9 @@ public class sensor implements SensorEventListener {
     private Timer mTimer;
     private TimerTask mTimerTask;
     private Handler mHandler;
-    private sensor sensor;
+    private SensorInfo SensorInfo;
     private  void initBfRun() {
-        sensor = this;
+        SensorInfo = this;
         gSensorValues[0] = gSensorValues[1] = gSensorValues[2] = 10;
         magneticValues[0] = magneticValues[1] = magneticValues[2] = 0;
         orienValue[0] = orienValue[1] = orienValue[2] = 0;
@@ -57,7 +57,7 @@ public class sensor implements SensorEventListener {
 
     }
 
-    protected void setSensor(int interval) {
+    protected void setSensorInfo(int interval) {
         Sensor mAccelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         if (mAccelerometer == null){
             //No Accelerometer Sensor!
@@ -71,7 +71,7 @@ public class sensor implements SensorEventListener {
             //No Proximity Sensor!
             Log.i("ssssss","No Proximity Sensor!");
         } else{
-            sensorManager.registerListener(this, mProximity, sensorManager.SENSOR_DELAY_NORMAL);
+            sensorManager.registerListener(this, mProximity, SensorManager.SENSOR_DELAY_NORMAL);
         }
 
         // Measures the ambient light level (illumination) in lx.
@@ -80,7 +80,7 @@ public class sensor implements SensorEventListener {
             //No mLight Sensor!
             Log.i("ssssss","No mLight Sensor!");
         } else{
-            sensorManager.registerListener(this, mLight, sensorManager.SENSOR_DELAY_NORMAL);
+            sensorManager.registerListener(this, mLight, SensorManager.SENSOR_DELAY_NORMAL);
         }
 
         // Measures the ambient air pressure in hPa or mbar.
@@ -89,7 +89,7 @@ public class sensor implements SensorEventListener {
             //No mPressure Sensor!
             Log.i("ssssss","No mPressure Sensor!");
         } else{
-            sensorManager.registerListener(this, mPressure, sensorManager.SENSOR_DELAY_NORMAL);
+            sensorManager.registerListener(this, mPressure, SensorManager.SENSOR_DELAY_NORMAL);
         }
 
         // Measures the ambient geomagnetic field for all three physical axes (x, y, z) in 弮T.
@@ -98,13 +98,13 @@ public class sensor implements SensorEventListener {
             //No mMagnetic Sensor!
             Log.i("ssssss","No mMagnetic Sensor!");
         } else{
-            sensorManager.registerListener(this, mMagnetic, sensorManager.SENSOR_DELAY_NORMAL);
+            sensorManager.registerListener(this, mMagnetic, SensorManager.SENSOR_DELAY_NORMAL);
         }
     }
 
     public void startService(DataListenerInterface dListener) {
         initBfRun();
-        setSensor(3000000);
+        setSensorInfo(3000000);
 
         dataListenerInterface = dListener;
     }

@@ -8,8 +8,6 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
-import com.example.sensing.Measurement.TrafficSnapshot;
-
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -26,7 +24,7 @@ public class background  extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d("haha_service_start","start");
         Log.d("haha_service_start","start");
-        new TrafficSnapshot(this);
+
         new Handler().postDelayed(new Runnable() {
                                       @Override
                                       public void run() {

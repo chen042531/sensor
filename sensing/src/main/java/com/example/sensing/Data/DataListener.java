@@ -2,15 +2,15 @@ package com.example.sensing.Data;
 
 import android.view.View;
 
-import com.example.sensing.Measurement.sensor;
+import com.example.sensing.Measurement.SensorInfo;
 
 public class DataListener implements DataListenerInterface {
-    sensor observerable;
+    SensorInfo observerable;
     View tv;
-    public DataListener(sensor observerable){
+    public DataListener(SensorInfo observerable){
         this.observerable = observerable;
     }
-    public DataListener(sensor observerable, View tv1){
+    public DataListener(SensorInfo observerable, View tv1){
         this.observerable = observerable;
         this.tv = tv1;
     }

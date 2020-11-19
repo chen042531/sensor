@@ -17,12 +17,13 @@ import androidx.core.app.ActivityCompat;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.text.DecimalFormat;
+import java.util.Objects;
 
 import static android.content.Context.ACTIVITY_SERVICE;
 
 public class CellInfo  extends BroadcastReceiver {
 
-//    getSystemService(Context.BATTERY_SERVICE)
+
 public static double electricity;
     public static int health = 0;
     public static int icon_small = 0;
@@ -38,17 +39,6 @@ public static double electricity;
     public static double temperature = 0.0;
     public static int voltage = 0;
 public static String screen_state = "on";
-    public void startService(TelephonyManager telephony) {
-
-//        if (telephony.getPhoneType() == TelephonyManager.PHONE_TYPE_GSM) {
-//            GsmCellLocation location = (GsmCellLocation) telephony.getCellLocation();
-//            if (location != null) {
-////                msg.setText("LAC: " + location.getLac() + " CID: " + location.getCid());
-//                Log.i("cellinfo","LAC: " + location.getLac() + " CID: " + location.getCid());
-//            }
-//        }
-
-    }
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -57,7 +47,7 @@ public static String screen_state = "on";
         icon_small = intent.getIntExtra(BatteryManager.EXTRA_ICON_SMALL, 0);
         level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
         plugged = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, 0);
-        present = intent.getExtras().getBoolean(BatteryManager.EXTRA_PRESENT);
+        present = Objects.requireNonNull(intent.getExtras()).getBoolean(BatteryManager.EXTRA_PRESENT);
         scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, 0);
         status = intent.getIntExtra(BatteryManager.EXTRA_STATUS, 0);
         technology = intent.getExtras().getString(BatteryManager.EXTRA_TECHNOLOGY);
@@ -134,6 +124,7 @@ public static String screen_state = "on";
             try {
                 Thread.sleep(360);
             } catch (Exception e) {
+                Log.d("cellinfo","cellinfo");
             }
 
             reader.seek(0);

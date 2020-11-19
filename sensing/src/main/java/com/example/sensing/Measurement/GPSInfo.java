@@ -31,7 +31,7 @@ public class GPSInfo implements GpsStatus.Listener,LocationListener {
 
     public GPSInfo(Context mContext) {
         this.mContext = mContext;
-        locationManager = (LocationManager) mContext.getSystemService(mContext.LOCATION_SERVICE);
+        locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
     }
 
     @Override
@@ -84,13 +84,7 @@ public class GPSInfo implements GpsStatus.Listener,LocationListener {
     @Override
     public void onProviderEnabled(String provider) {
         if (locationListener != null) {
-            //Writing file in new thread 2018/10/07
-//            new Thread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    FileMaker.write(JsonParser.ErrorInfoToJson("LOG", "onProviderEnabled():"+provider));
-//                }
-//            }).start();
+
             locationListener.onProviderEnabled(provider);
             Log.i("gps", String.valueOf(provider));
         }
@@ -99,13 +93,7 @@ public class GPSInfo implements GpsStatus.Listener,LocationListener {
     @Override
     public void onProviderDisabled(String provider) {
         if (locationListener != null) {
-            //Writing file in new thread 2018/10/07
-//            new Thread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    FileMaker.write(JsonParser.ErrorInfoToJson("LOG","onProviderDisabled():"+provider));
-//                }
-//            }).start();
+
             locationListener.onProviderEnabled(provider);
 
         }
@@ -131,10 +119,7 @@ public class GPSInfo implements GpsStatus.Listener,LocationListener {
         // Get the location by WLAN or mobile network. It's usually used at the place which is more hidden.
         boolean network = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
-        if (gps || network) {
-            return true;
-        }
-        return false;
+        return gps || network;
     }
     public static int checkGPSalive() {
         //satelliteUpdate();

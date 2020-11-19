@@ -15,13 +15,13 @@ import com.example.sensing.Data.DataListener;
 import com.example.sensing.Measurement.GPSInfo;
 import com.example.sensing.Measurement.PhoneState;
 import com.example.sensing.Measurement.WiFiInfo;
-import com.example.sensing.Measurement.sensor;
+import com.example.sensing.Measurement.SensorInfo;
 import com.example.sensing.SensingGO;
 
 public class MainActivity extends AppCompatActivity {
 
     private SensorManager sensorManager;
-    private sensor sr ;
+    private SensorInfo sr ;
     private GPSInfo gps;
     private WiFiInfo wifiinfo;
     private CellularInfo cell;
@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
         }
 //        startService(new Intent(this, background.class));
-        sr =  new sensor(this);
+        sr =  new SensorInfo(this);
 //        sr.print();
 //        sensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
         final TextView tv1 = (TextView)findViewById(R.id.textView2);
@@ -57,10 +57,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        gps = new GPSInfo(this);
-//        Log.i("gps_enable", String.valueOf(GPSInfo.checkGPSalive()));
-//        gps.startGPS(this);
-//        gps.getGPS(this);
+        gps = new GPSInfo(this);
+        Log.i("gps_enable", String.valueOf(GPSInfo.checkGPSalive()));
+        gps.startGPS(this);
+        gps.getGPS(this);
 
         new SensingGO(this,"haha");
 
