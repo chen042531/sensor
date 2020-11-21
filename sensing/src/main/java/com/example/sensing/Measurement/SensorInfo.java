@@ -22,6 +22,7 @@ public class SensorInfo implements SensorEventListener {
     public static float[] gSensorValues = new float[3]; // triaxial acceleration
     public static float[] magneticValues = new float[3];
     public static int lightValue;
+    private static int sensorInterval;
     public static String proximityValue;
     public static float pressureValue,pvalue;
     private float[] rMatrix = new float[9];    //rotation matrix
@@ -46,6 +47,7 @@ public class SensorInfo implements SensorEventListener {
     private TimerTask mTimerTask;
     private Handler mHandler;
     private SensorInfo SensorInfo;
+
     private  void initBfRun() {
         SensorInfo = this;
         gSensorValues[0] = gSensorValues[1] = gSensorValues[2] = 10;
@@ -57,13 +59,13 @@ public class SensorInfo implements SensorEventListener {
 
     }
 
-    protected void setSensorInfo(int interval) {
+    protected void setSensorInfo() {
         Sensor mAccelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         if (mAccelerometer == null){
             //No Accelerometer Sensor!
             Log.i("ssssss","No Accelerometer Sensor!");
         } else{
-            sensorManager.registerListener(this, mAccelerometer, interval,interval);
+            sensorManager.registerListener(this, mAccelerometer, sensorInterval,sensorInterval);
         }
 
         Sensor mProximity = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
@@ -102,13 +104,20 @@ public class SensorInfo implements SensorEventListener {
         }
     }
 
-    public void startService(DataListenerInterface dListener) {
+    public void startService(DataListenerInterface dataListener,
+                             int sInterval) {
+        sensorInterval=sInterval;
         initBfRun();
-        setSensorInfo(3000000);
+        setSensorInfo();
 
-        dataListenerInterface = dListener;
+        dataListenerInterface = dataListener;
     }
+    public void startService(DataListenerInterface dataListener) {
+        initBfRun();
+        setSensorInfo();
 
+        dataListenerInterface = dataListener;
+    }
     public void stopService(SensorManager sensorManager) {
         // Accelerometer, Light, Proximity, Barometer, Magnetometer
         sensorManager.unregisterListener(this);

@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
                 String s = String.valueOf(sr.magneticValues[0]);
                 tv1.setText(s);
             }
-        });
+        },1000);
 
         gps = new LocationInfo(this);
         Log.i("gps_enable", String.valueOf(LocationInfo.checkGPSalive()));

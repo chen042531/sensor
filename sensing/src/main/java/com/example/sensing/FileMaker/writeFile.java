@@ -3,6 +3,8 @@ package com.example.sensing.FileMaker;
 import android.content.Context;
 import android.util.Log;
 
+import com.example.sensing.Data.SGData;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
@@ -18,6 +20,21 @@ public class writeFile {
 //    String filePath = "/data/com.example.sensor/logs/fileName_test";
 //    public void writeFile(String fileName,String writestr)
     public writeFile(Context mContext) throws IOException {
+        this.mContext = mContext;
+        try{
+//            FileWriter fileWriter = new FileWriter("ff", true);
+            FileOutputStream fout = mContext.openFileOutput("example.json", MODE_PRIVATE);
+            byte [] bytes = content.getBytes();
+            fout.write(bytes);
+//            fout.close();
+            Log.d("writefile", "writefile");
+        }
+        catch(Exception e){
+            e.printStackTrace();
+            Log.d("writefile", "gg");
+        }
+    }
+    public writeFile(Context mContext, SGData sgData) throws IOException {
         this.mContext = mContext;
         try{
 //            FileWriter fileWriter = new FileWriter("ff", true);

@@ -3,7 +3,7 @@ package com.example.sensing;
 import android.content.Context;
 import android.content.Intent;
 
-import com.example.sensing.BackgroundRunner.background;
+import com.example.sensing.BackgroundRunner.backgroundRunner;
 
 
 public class SensingGO {
@@ -11,7 +11,7 @@ public class SensingGO {
     public SensingGO(Context mContext, String type) {
 
         this.mContext = mContext;
-        mContext.startService(new Intent(mContext,background.class));
+        mContext.startService(new Intent(mContext, backgroundRunner.class));
     }
 //    public type(String type) {
 //        this.mContext = mContext;

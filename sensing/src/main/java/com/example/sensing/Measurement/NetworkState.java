@@ -1,7 +1,6 @@
 package com.example.sensing.Measurement;
 
 import android.content.Context;
-import android.hardware.SensorManager;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
@@ -10,16 +9,26 @@ import android.os.Build;
 import android.util.Log;
 
 import static android.content.Context.CONNECTIVITY_SERVICE;
-import static android.content.Context.SENSOR_SERVICE;
 
 public class NetworkState {
     public Context mContext;
     public ConnectivityManager connectivityManager;
 
     public String Network_type = null;
+
+    private Network nw;
+    private NetworkCapabilities actNw;
+    private NetworkInfo nwInfo;
     public NetworkState(Context mContext) {
         this.mContext = mContext;
         this.connectivityManager = (ConnectivityManager)mContext.getSystemService(CONNECTIVITY_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            nw = connectivityManager.getActiveNetwork();
+            actNw = connectivityManager.getNetworkCapabilities(nw);
+        }
+        else {
+            nwInfo = connectivityManager.getActiveNetworkInfo();
+        }
     }
     public void networkstateTest(){
         Log.d("networkstateTest", String.valueOf(isNetworkAvailable())) ;
@@ -34,6 +43,19 @@ public class NetworkState {
             if (nw == null) return false;
             NetworkCapabilities actNw = connectivityManager.getNetworkCapabilities(nw);
             if (actNw != null) {
+                return actNw != null && (actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) || actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) || actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) || actNw.hasTransport(NetworkCapabilities.TRANSPORT_BLUETOOTH));
+            }
+            else {
+                return nwInfo != null && nwInfo.isConnected();
+            }
+        }
+        return false;
+    }
+    private void getNetworkType(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Network nw = connectivityManager.getActiveNetwork();
+            NetworkCapabilities actNw = connectivityManager.getNetworkCapabilities(nw);
+            if (actNw != null) {
                 if (actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
                     Network_type = "MOBILE";
                     Log.d("networkstateTest", "mobile") ;
@@ -46,20 +68,18 @@ public class NetworkState {
                 else{
                     Network_type = null;
                 }
-                return actNw != null && (actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) || actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) || actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) || actNw.hasTransport(NetworkCapabilities.TRANSPORT_BLUETOOTH));
+
             }
             else {
-                NetworkInfo nwInfo = connectivityManager.getActiveNetworkInfo();
                 if(nwInfo.getTypeName()!=null) {
                     Network_type = nwInfo.getTypeName();
                 }
                 else{
                     Network_type = "null";
                 }
-                return nwInfo != null && nwInfo.isConnected();
+
             }
         }
-        return false;
     }
 
 }
