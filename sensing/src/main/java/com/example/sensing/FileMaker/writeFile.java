@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Field;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -52,55 +53,17 @@ public class writeFile {
             Log.d("writefile", "gg");
         }
     }
-    public String servingCellInfoToJson(Context context) {
-        if (RunIntentService.neighborCellList.size() == 0) {
-            return "";
-        }
-
+    public void write(SGData sgData) throws IOException {
+        Class cls = sgData.getClass();
         JSONObject obj = new JSONObject();
-
-        try {
-            commonData(obj, context);
-            gpsData(obj);
-            obj.put("Event", "ServingCell"); // new event!
-            //------------------------results
-            JSONObject cellInfo = new JSONObject();
-            if (SignalStrength.cellInfoType.equals("LTE")) {
-                //Log.d("CellInfo", "[LTE]"+RunIntentService.AtCellID+":"+RunIntentService.AtCellPCI+":"+RunIntentService.AtCellRSRP);
-
-                cellInfo.put("CellInfoType", RunIntentService.cellInfoType);
-                cellInfo.put("CellID", RunIntentService.lteCellID);
-                cellInfo.put("CellMCC", RunIntentService.lteCellMCC); //country code
-                cellInfo.put("CellMNC", RunIntentService.lteCellMNC);
-
-                cellInfo.put("CellPCI", RunIntentService.lteCellPCI); //physical cell id
-                cellInfo.put("CellTAC", RunIntentService.lteCellTAC); //
-
-                cellInfo.put("RSSI", SignalStrength.lteCellRSSI);
-                cellInfo.put("SINR", "null");
-                cellInfo.put("RSRQ", RunIntentService.lteCellRSRQ);
-                cellInfo.put("RSRP", RunIntentService.lteCellRSRP);
-
-            } else if (SignalStrength.cellInfoType.equals("Wcdma")) {
-                //Log.d("CellInfo", "[WCDMA]"+RunIntentService.WcdmaAtCellID+":"+RunIntentService.WcdmaAtCellSignalStrength);
-
-                cellInfo.put("CellInfoType", RunIntentService.cellInfoType);
-                cellInfo.put("CellID", RunIntentService.wcdmaAtCellID);
-                cellInfo.put("CellMCC", RunIntentService.wcdmaAtCellMCC);
-                cellInfo.put("CellMNC", RunIntentService.wcdmaAtCellMNC);
-                cellInfo.put("CellPSC", RunIntentService.wcdmaAtCellPsc);
-                cellInfo.put("CellLAC", RunIntentService.wcdmaAtCellLac);
-                cellInfo.put("SignalStrength", RunIntentService.wcdmaAtCellSignalStrength);
-            }
-
-            obj.put("ServingCellInfo", cellInfo);
-            servingCellInfo = obj.toString(2);
-            return obj.toString();
-
-        } catch (JSONException e) {
-            e.printStackTrace();
+        for (Field i : cls.getDeclaredFields()) {
+//            System.out.println(var.class);
+//        for(int i = 0; i < fields.length; i++) {
+//            System.out.println("Field = " + fields[i].toString());
+//            obj.put("Event", "ServingCell");
+//        }
         }
-        return null;
+
     }
 
 }

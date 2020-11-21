@@ -17,8 +17,8 @@ import java.util.Properties;
 //import org.apache.http.util.EncodingUtils;
 import static android.content.Context.SENSOR_SERVICE;
 
-    public class sendData extends AsyncTask<Void, String, Integer> {
-        private Session mSession;
+public class sendData extends AsyncTask<Void, String, Integer> {
+    private Session mSession;
 
     private String logPath;
     public Context mContext;
