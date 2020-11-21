@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.SensorManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.HardwarePropertiesManager;
 import android.util.Log;
@@ -59,6 +60,14 @@ public class MainActivity extends AppCompatActivity {
         if (!hasPermissions(this, PERMISSIONS)) {
             ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
         }
+//        try {
+//            write_file = new writeFile(this);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        s = new sendData(this);
+//
+//        s.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 //        startService(new Intent(this, background.class));
         sr =  new SensorInfo(this);
 //        sr.print();
