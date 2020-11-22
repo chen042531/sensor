@@ -3,6 +3,7 @@ package com.example.sensing.Data;
 import android.location.GpsStatus;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -152,7 +153,8 @@ public class SGData {
         JSONObject dataInfo = new JSONObject();
         for (Field field : cls.getDeclaredFields()){
             String field_name = field.getName();
-            dataInfo.put(field_name,field.get(field_name));
+            Log.i("SGData", field_name+": "+String.valueOf(field.get(this)));
+            dataInfo.put(field_name,field.get(this));
         }
         return dataInfo;
     }

@@ -24,33 +24,46 @@ public class writeFile {
 //    public void writeFile(String fileName,String writestr)
     public writeFile(Context mContext) throws IOException {
         this.mContext = mContext;
-        try{
-//            FileWriter fileWriter = new FileWriter("ff", true);
-            FileOutputStream fout = mContext.openFileOutput("example.json", MODE_PRIVATE);
-            byte [] bytes = content.getBytes();
-            fout.write(bytes);
-//            fout.close();
-            Log.d("writefile", "writefile");
-        }
-        catch(Exception e){
-            e.printStackTrace();
-            Log.d("writefile", "gg");
-        }
+//        try{
+////            FileWriter fileWriter = new FileWriter("ff", true);
+//            FileOutputStream fout = mContext.openFileOutput("example.json", MODE_PRIVATE);
+//            byte [] bytes = content.getBytes();
+//            fout.write(bytes);
+////            fout.close();
+//            Log.d("writefile", "writefile");
+//        }
+//        catch(Exception e){
+//            e.printStackTrace();
+//            Log.d("writefile", "gg");
+//        }
     }
-    public writeFile(Context mContext, SGData sgData) throws IOException {
-        this.mContext = mContext;
+    public boolean write(SGData sgData) throws IOException {
+
         try{
 //            FileWriter fileWriter = new FileWriter("ff", true);
-            FileOutputStream fout = mContext.openFileOutput("example.json", MODE_PRIVATE);
-            byte [] bytes = content.getBytes();
-            fout.write(bytes);
-//            fout.close();
+            FileOutputStream fout = mContext.openFileOutput("user1.json", MODE_PRIVATE);
+            try {
+                Log.i("SGData",sgData.getSGData().toString());
+                String sgDataString = sgData.getSGData().toString();
+                byte [] bytes = sgDataString.getBytes();
+                fout.write(bytes);
+                //            fout.close();
+                return true;
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
             Log.d("writefile", "writefile");
+
         }
         catch(Exception e){
             e.printStackTrace();
             Log.d("writefile", "gg");
         }
+        return false;
     }
 
 

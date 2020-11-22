@@ -15,6 +15,9 @@ import android.os.HardwarePropertiesManager;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.example.sensing.Data.SGData;
+import com.example.sensing.FileMaker.writeFile;
+import com.example.sensing.FileSender.sendData;
 import com.example.sensing.Measurement.CellularInfo;
 import com.example.sensing.Data.DataListener;
 import com.example.sensing.Measurement.LocationInfo;
@@ -24,6 +27,8 @@ import com.example.sensing.Measurement.PhoneState;
 import com.example.sensing.Measurement.WiFiInfo;
 import com.example.sensing.Measurement.SensorInfo;
 import com.example.sensing.SensingGO;
+
+import org.json.JSONException;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -60,12 +65,7 @@ public class MainActivity extends AppCompatActivity {
         if (!hasPermissions(this, PERMISSIONS)) {
             ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
         }
-//        try {
-//            write_file = new writeFile(this);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        s = new sendData(this);
+
 //
 //        s.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 //        startService(new Intent(this, background.class));
@@ -112,6 +112,22 @@ public class MainActivity extends AppCompatActivity {
         cellularInfo = new CellularInfo(this);
         cellularInfo.startService();
 
+        SGData sdata = new SGData();
+        try {
+            Log.i("SGData",sdata.getSGData().toString());
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            writeFile write_file = new writeFile(this);
+            write_file.write(sdata);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        sendData s = new sendData(this);
+        s.execute();
 
     }
     public static boolean hasPermissions(Context context, String... permissions) {

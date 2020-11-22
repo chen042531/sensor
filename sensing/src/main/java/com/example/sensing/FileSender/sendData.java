@@ -29,7 +29,7 @@ public class sendData extends AsyncTask<Void, String, Integer> {
     }
     public boolean connectSFTPServer(){
         try{
-            FileInputStream fin = mContext.openFileInput("example.json");
+            FileInputStream fin = mContext.openFileInput("user1.json");
             int length = fin.available();
             byte [] buffer = new byte[length];
             fin.read(buffer);
@@ -54,7 +54,7 @@ public class sendData extends AsyncTask<Void, String, Integer> {
             mSession.connect();
             ChannelSftp sftpChannel = (ChannelSftp) mSession.openChannel("sftp");
             sftpChannel.connect();
-            sftpChannel.put("/data/data/com.example.sensor/files/example.json","/home/yicchen/Desktop/example.json");
+            sftpChannel.put("/data/data/com.example.sensor/files/user1.json","/home/yicchen/Desktop/user1.json");
         } catch (JSchException | SftpException e) {
             e.printStackTrace();
 
