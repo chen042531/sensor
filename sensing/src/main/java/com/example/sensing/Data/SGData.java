@@ -4,6 +4,12 @@ import android.location.GpsStatus;
 import android.location.LocationListener;
 import android.location.LocationManager;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.lang.reflect.Field;
+import java.util.HashMap;
+
 public class SGData {
 //    AppicationType
 //            ApplicationVersion
@@ -137,4 +143,17 @@ public class SGData {
     public static float[] orienValue = new float[3];
     // networkstate
     public String Network_type;
+
+
+
+    private Class cls = this.getClass();
+
+    public Object getSGData() throws IllegalAccessException, JSONException {
+        JSONObject dataInfo = new JSONObject();
+        for (Field field : cls.getDeclaredFields()){
+            String field_name = field.getName();
+            dataInfo.put(field_name,field.get(field_name));
+        }
+        return dataInfo;
+    }
 }

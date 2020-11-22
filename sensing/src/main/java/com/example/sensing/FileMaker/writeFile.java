@@ -12,7 +12,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.Field;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -53,17 +52,6 @@ public class writeFile {
             Log.d("writefile", "gg");
         }
     }
-    public void write(SGData sgData) throws IOException {
-        Class cls = sgData.getClass();
-        JSONObject obj = new JSONObject();
-        for (Field i : cls.getDeclaredFields()) {
-//            System.out.println(var.class);
-//        for(int i = 0; i < fields.length; i++) {
-//            System.out.println("Field = " + fields[i].toString());
-//            obj.put("Event", "ServingCell");
-//        }
-        }
 
-    }
 
 }
