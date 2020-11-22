@@ -28,6 +28,9 @@ import java.util.concurrent.TimeUnit;
 public class backgroundRunner extends Service {
 
     public static SGData sgData;
+    private int mInterval = 5000; // 5 seconds by default, can be changed later
+    private Handler mHandler;
+
     ///////
     @Nullable
     @Override
@@ -76,9 +79,10 @@ public class backgroundRunner extends Service {
             }
         };
 
-        ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-        executor.scheduleAtFixedRate(helloRunnable, 0, 3, TimeUnit.SECONDS);
-
+//        ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+//        executor.scheduleAtFixedRate(helloRunnable, 0, 3, TimeUnit.SECONDS);
+        mHandler = new Handler();
+        startRepeatingTask();
         
         return  START_REDELIVER_INTENT;
     }
@@ -91,7 +95,33 @@ public class backgroundRunner extends Service {
         }
 
     }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        stopRepeatingTask();
+    }
+    Runnable mStatusChecker = new Runnable() {
+        @Override
+        public void run() {
+            try {
+//                updateStatus(); //this function can change value of mInterval.
+                Log.d("haha_service_start_haha","Hello world");
 
+            } finally {
+                // 100% guarantee that this always happens, even if
+                // your update method throws an exception
+                mHandler.postDelayed(mStatusChecker, mInterval);
+            }
+        }
+    };
+
+    void startRepeatingTask() {
+        mStatusChecker.run();
+    }
+
+    void stopRepeatingTask() {
+        mHandler.removeCallbacks(mStatusChecker);
+    }
     @RequiresApi(Build.VERSION_CODES.O)
     private void startMyOwnForeground(){
         String NOTIFICATION_CHANNEL_ID = "com.example.simpleapp";

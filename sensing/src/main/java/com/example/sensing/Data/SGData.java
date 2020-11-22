@@ -149,6 +149,7 @@ public class SGData {
 
     private Class cls = this.getClass();
 
+
     public Object getSGData() throws IllegalAccessException, JSONException {
         JSONObject dataInfo = new JSONObject();
         for (Field field : cls.getDeclaredFields()){

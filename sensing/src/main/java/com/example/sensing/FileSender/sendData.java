@@ -23,27 +23,22 @@ public class sendData extends AsyncTask<Void, String, Integer> {
     private String logPath;
     public Context mContext;
     String filePath = "/data/data/com.example.sensor/files";
+    private String UserID_path = "user";
+    //    String filePath = "/data/com.example.sensor/logs/fileName_test";
+//    public void writeFile(String fileName,String writestr)
+    public void setUserID(String userID_path){
+        this.UserID_path = userID_path;
+    }
     public sendData(Context mContext) {
         this.mContext = mContext;
 
     }
+
     public boolean connectSFTPServer(){
-        try{
-            FileInputStream fin = mContext.openFileInput("user1.json");
-            int length = fin.available();
-            byte [] buffer = new byte[length];
-            fin.read(buffer);
-            String str = new String(buffer, StandardCharsets.UTF_8);
-            Log.d("connectSFTPServer", str);
-//            res = EncodingUtils.getString(buffer, "UTF-8");
-            fin.close();
-        }
-        catch(Exception e){
-            e.printStackTrace();
-        }
         try {
             JSch jsch = new JSch();
             mSession = null;
+
             Log.d("hostohst", "140.113.216.51");
             mSession = jsch.getSession("yicchen", "140.113.216.51", 22); // port 22
             mSession.setPassword("chen66261034");
@@ -52,24 +47,44 @@ public class sendData extends AsyncTask<Void, String, Integer> {
             properties.setProperty("StrictHostKeyChecking", "no");
             mSession.setConfig(properties);
             mSession.connect();
-            ChannelSftp sftpChannel = (ChannelSftp) mSession.openChannel("sftp");
-            sftpChannel.connect();
-            sftpChannel.put("/data/data/com.example.sensor/files/user1.json","/home/yicchen/Desktop/user1.json");
-        } catch (JSchException | SftpException e) {
+            return true;
+        } catch (JSchException e) {
             e.printStackTrace();
-
-            Log.d("connectSFTPServer", String.valueOf(e));
             return false;
         }
-        return true;
+
     }
 
+//        try{
+//            FileInputStream fin = mContext.openFileInput("user1.json");
+//            int length = fin.available();
+//            byte [] buffer = new byte[length];
+//            fin.read(buffer);
+//            String str = new String(buffer, StandardCharsets.UTF_8);
+//            Log.d("connectSFTPServer", str);
+////            res = EncodingUtils.getString(buffer, "UTF-8");
+//            fin.close();
+//        }
+//        catch(Exception e){
+//            e.printStackTrace();
+//        }
+
+
     @Override
-    protected Integer doInBackground(Void... voids) {
+    protected Integer doInBackground(Void... params) {
         if(connectSFTPServer()){
-            Log.d("connectSFTPServer", "yes");
-            logPath = new String("/data/data/" + mContext.getPackageName()) + "/logs/";
-            Log.d("connectSFTPServer", logPath);
+            ChannelSftp sftpChannel = null;
+            try {
+                sftpChannel = (ChannelSftp) mSession.openChannel("sftp");
+                sftpChannel.connect();
+                Log.i("sender","/data/data/com.example.sensor/files/"+UserID_path+".json");
+                Log.i("sender","/home/yicchen/Desktop/"+UserID_path+".json");
+                sftpChannel.put("/data/data/com.example.sensor/files/"+UserID_path+".json","/home/yicchen/Desktop/"+UserID_path+".json");
+            } catch (JSchException | SftpException e) {
+                e.printStackTrace();
+            }
+
+
         }
         else{
             Log.d("connectSFTPServer", "no");

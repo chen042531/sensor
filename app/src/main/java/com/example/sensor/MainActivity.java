@@ -122,11 +122,15 @@ public class MainActivity extends AppCompatActivity {
         }
         try {
             writeFile write_file = new writeFile(this);
+            write_file.setUserID("user6");
+            write_file.write(sdata);
+            write_file.write(sdata);
             write_file.write(sdata);
         } catch (IOException e) {
             e.printStackTrace();
         }
         sendData s = new sendData(this);
+        s.setUserID("user6");
         s.execute();
 
     }

@@ -6,13 +6,13 @@ import android.util.Log;
 import com.example.sensing.Data.SGData;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import static android.content.Context.MODE_APPEND;
 import static android.content.Context.MODE_PRIVATE;
 
 public class writeFile {
@@ -20,31 +20,25 @@ public class writeFile {
     File file;
     String content = "123123";
     public Context mContext;
+    private String UserID = "user";
+    private static FileWriter fileWriter;
 //    String filePath = "/data/com.example.sensor/logs/fileName_test";
 //    public void writeFile(String fileName,String writestr)
+    public void setUserID(String userID){
+        this.UserID = userID;
+    }
     public writeFile(Context mContext) throws IOException {
         this.mContext = mContext;
-//        try{
-////            FileWriter fileWriter = new FileWriter("ff", true);
-//            FileOutputStream fout = mContext.openFileOutput("example.json", MODE_PRIVATE);
-//            byte [] bytes = content.getBytes();
-//            fout.write(bytes);
-////            fout.close();
-//            Log.d("writefile", "writefile");
-//        }
-//        catch(Exception e){
-//            e.printStackTrace();
-//            Log.d("writefile", "gg");
-//        }
+//        fileWriter = new FileWriter(UserID+".json",true);
     }
     public boolean write(SGData sgData) throws IOException {
 
         try{
 //            FileWriter fileWriter = new FileWriter("ff", true);
-            FileOutputStream fout = mContext.openFileOutput("user1.json", MODE_PRIVATE);
+            FileOutputStream fout = new FileOutputStream(UserID+".json", true);
             try {
                 Log.i("SGData",sgData.getSGData().toString());
-                String sgDataString = sgData.getSGData().toString();
+                String sgDataString = sgData.getSGData().toString()+"\n";
                 byte [] bytes = sgDataString.getBytes();
                 fout.write(bytes);
                 //            fout.close();
@@ -57,13 +51,15 @@ public class writeFile {
 
 
             Log.d("writefile", "writefile");
-
+//            fileWriter.write(sgData.getSGData().toString());
+            return true;
         }
         catch(Exception e){
             e.printStackTrace();
             Log.d("writefile", "gg");
+            return false;
         }
-        return false;
+
     }
 
 
