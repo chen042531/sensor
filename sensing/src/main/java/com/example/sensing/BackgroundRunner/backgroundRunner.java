@@ -30,6 +30,8 @@ import com.example.sensing.Measurement.PhoneState;
 import com.example.sensing.Measurement.SensorInfo;
 import com.example.sensing.Measurement.WiFiInfo;
 
+import org.json.JSONException;
+
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -66,41 +68,72 @@ public class backgroundRunner extends Service {
         notifyMsg();
         sgData = new SGData();
 //
-//        cellularInfo = new CellularInfo(this);
-//        cellularInfo.startService(new DataListener(cellularInfo){
-//            @Override
-//            public void onDataReceived() {
+        cellularInfo = new CellularInfo(this);
+        cellularInfo.startService(new DataListener(cellularInfo){
+            @Override
+            public void onDataReceived() {
+                sgData.cellInfoType = CellularInfo.cellInfoType;
+                sgData.PreAtCellID = CellularInfo.PreAtCellID;
+                //LTE
+                sgData.lteCellRSRP = CellularInfo.lteCellRSRP;
+                sgData.lteCellID = CellularInfo.lteCellID;
+                sgData.lteCellMCC = CellularInfo.lteCellMCC;
+                sgData.lteCellMNC = CellularInfo.lteCellMNC;
+                sgData.lteCellPCI = CellularInfo.lteCellPCI;
+                sgData.lteCellTAC = CellularInfo.lteCellTAC;
+                sgData.lteCellRSSI = CellularInfo.lteCellRSSI;
+                sgData.lteCellRSRQ = CellularInfo.lteCellRSRQ;
+                sgData.lteCellRSSNR = CellularInfo.lteCellRSSNR;
+
+                sgData.cellTimeInterval = CellularInfo.cellTimeInterval;
+
+                //wcdma
+                sgData.wcdmaAtCellPsc = CellularInfo.wcdmaAtCellPsc;
+                sgData.wcdmaAtCellLac = CellularInfo.wcdmaAtCellLac;
+                sgData.wcdmaAtCellID = CellularInfo.wcdmaAtCellID;
+                sgData.wcdmaAtCellMCC = CellularInfo.wcdmaAtCellMCC;
+                sgData.wcdmaAtCellMNC = CellularInfo.wcdmaAtCellMNC;
+                sgData.wcdmaAtCellSignalStrength = CellularInfo.wcdmaAtCellSignalStrength;
+
+                sgData.passCellNum = CellularInfo.passCellNum;
+                sgData.nowCellID = CellularInfo.nowCellID;
+                sgData.stayCellAt = CellularInfo.stayCellAt;
+                sgData.cellHoldTime = CellularInfo.cellHoldTime;
+                sgData.avgCellResidenceTime = CellularInfo.avgCellResidenceTime;
+                sgData.avgCellHoldTime = CellularInfo.avgCellHoldTime;
+                sgData.ttlCellResidenceTime = CellularInfo.ttlCellResidenceTime;
+
+
+
+            }
+        });
+        gps = new LocationInfo(this);
+        gps.startService(new DataListener(gps){
+            @Override
+            public void onDataReceived() {
 //
+
+            }
+        });
 //
-//            }
-//        });
-//        gps = new LocationInfo(this);
-//        gps.startService(new DataListener(gps){
-//            @Override
-//            public void onDataReceived() {
-////
+        networkState = new NetworkState(this);
+        sgData.Network_type = networkState.getNetworkType();
 //
-//            }
-//        });
+        phoneInfo = new PhoneInfo(this);
+        phoneInfo.startService(new DataListener(phoneInfo){
+            @Override
+            public void onDataReceived() {
 //
-//        networkState = new NetworkState(this);
+            }
+        });
 //
+        phoneState = new PhoneState(this);
+        phoneState.startService(new DataListener(phoneState){
+            @Override
+            public void onDataReceived() {
 //
-//        phoneInfo = new PhoneInfo(this);
-//        phoneInfo.startService(new DataListener(phoneInfo){
-//            @Override
-//            public void onDataReceived() {
-////
-//            }
-//        });
-//
-//        phoneState = new PhoneState(this);
-//        phoneState.startService(new DataListener(phoneState){
-//            @Override
-//            public void onDataReceived() {
-////
-//            }
-//        });
+            }
+        });
         sensorInfo =  new SensorInfo(this);
         sensorInfo.startService(new DataListener(sensorInfo){
             @Override
@@ -111,6 +144,14 @@ public class backgroundRunner extends Service {
                 sgData.proximityValue = SensorInfo.proximityValue;
                 sgData.lightValue = SensorInfo.lightValue;
                 sgData.pressureValue = SensorInfo.pressureValue;
+
+                try {
+                    Log.i("background_sgData", sgData.getSGData().toString());
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
 

@@ -120,21 +120,21 @@ public class SGData {
     public static GpsStatus gpsStatus = null;
 
     //    cellularinfo
-    public static String cellInfoType;
+    public  String cellInfoType;
 
-    public static int PreAtCellID;
+    public int PreAtCellID;
 
     //LTE info
-    public static int lteCellRSRP, lteCellID, lteCellMCC, lteCellMNC, lteCellPCI, lteCellTAC, lteCellRSSI, lteCellRSRQ, lteCellRSSNR;
-    public static long cellTimeInterval;
+    public  int lteCellRSRP, lteCellID, lteCellMCC, lteCellMNC, lteCellPCI, lteCellTAC, lteCellRSSI, lteCellRSRQ, lteCellRSSNR;
+    public long cellTimeInterval;
 
     //Wcdma info
-    public static int wcdmaAtCellPsc, wcdmaAtCellLac, wcdmaAtCellID, wcdmaAtCellMCC, wcdmaAtCellMNC, wcdmaAtCellSignalStrength;
+    public int wcdmaAtCellPsc, wcdmaAtCellLac, wcdmaAtCellID, wcdmaAtCellMCC, wcdmaAtCellMNC, wcdmaAtCellSignalStrength;
 
-    public static int passCellNum = 0;
-    public static int nowCellID = 0;
-    public static long stayCellAt = 0, cellHoldTime = 0;
-    public static double avgCellResidenceTime = 0, avgCellHoldTime, ttlCellResidenceTime = 0;
+    public  int passCellNum = 0;
+    public  int nowCellID = 0;
+    public  long stayCellAt = 0, cellHoldTime = 0;
+    public  double avgCellResidenceTime = 0, avgCellHoldTime, ttlCellResidenceTime = 0;
 
 
     //    sensorInfo
