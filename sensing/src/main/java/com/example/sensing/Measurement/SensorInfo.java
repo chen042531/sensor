@@ -10,6 +10,7 @@ import android.util.Log;
 import android.widget.TextView;
 
 import com.example.sensing.Data.DataListenerInterface;
+import com.example.sensing.Data.SGData;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -34,6 +35,8 @@ public class SensorInfo implements SensorEventListener {
     private static float[] gSensorValuesTemp = new float[3];
     private static float[] magneticValuesTemp = new float[3];
     private static float[] orienValueTemp = new float[3];
+
+//    private SGData sg_data;
     public Context mContext;
     public  TextView tt;
     public DataListenerInterface dataListenerInterface;
@@ -113,11 +116,18 @@ public class SensorInfo implements SensorEventListener {
         dataListenerInterface = dataListener;
     }
     public void startService(DataListenerInterface dataListener) {
+
         initBfRun();
         setSensorInfo();
 
         dataListenerInterface = dataListener;
     }
+//    public void startService_with_SGData(SGData sgData) {
+//        initBfRun();
+//        setSensorInfo();
+//
+//        this.sg_data=sgData;
+//    }
     public void stopService(SensorManager sensorManager) {
         // Accelerometer, Light, Proximity, Barometer, Magnetometer
         sensorManager.unregisterListener(this);
@@ -143,7 +153,9 @@ public class SensorInfo implements SensorEventListener {
                 gSensorValues[2] = values[2];
 //                Log.i("kkkkk", String.valueOf("ACCELEROMETER"+gSensorValues[0]+","+gSensorValues[1]+","+gSensorValues[2]));
 //
-
+//                sg_data.gSensorValues[0] = values[0];
+//                sg_data.gSensorValues[1] = values[1];
+//                sg_data.gSensorValues[2] = values[2];
                 dataListenerInterface.onDataReceived();
 //                tt.setText(String.valueOf("ACCELEROMETER"+gSensorValues[0]+","+gSensorValues[1]+","+gSensorValues[2]));
                 break;
@@ -159,6 +171,8 @@ public class SensorInfo implements SensorEventListener {
                 pvalue = event.values[0];
                 Log.i("ssssss", "TYPE_PROXIMITY: "+event.values[0]);
 //                        FileMaker.write(JsonParser.sensorInfoToJson("PROXIMITY", str));
+//                sg_data.pvalue = event.values[0];
+                dataListenerInterface.onDataReceived();
                 break;
 
             case Sensor.TYPE_LIGHT: //lux
@@ -167,12 +181,16 @@ public class SensorInfo implements SensorEventListener {
 
                     Log.i("ssssss", "TYPE_LIGHT: "+lightValue);
 //                            FileMaker.write(JsonParser.sensorInfoToJson("LIGHT", ""+event.values[0]));
+//                    sg_data.lightValue = (int)event.values[0];
+                    dataListenerInterface.onDataReceived();
                 }
                 break;
 
             case Sensor.TYPE_PRESSURE: //hPa
                     pressureValue = event.values[0];
                      Log.i("ssssss", "pressureValue: "+pressureValue);
+//                    sg_data.pressureValue = event.values[0];
+                    dataListenerInterface.onDataReceived();
                 break;
 
             case Sensor.TYPE_MAGNETIC_FIELD: // Measures the ambient geomagnetic field for all three physical axes (x, y, z) in 弮T.
@@ -187,6 +205,11 @@ public class SensorInfo implements SensorEventListener {
                 magneticValues[0] = mValues[0];
                 magneticValues[1] = mValues[1];
                 magneticValues[2] = mValues[2];
+
+//                sg_data.magneticValues[0] = mValues[0];
+//                sg_data.magneticValues[1] = mValues[1];
+//                sg_data.magneticValues[2] = mValues[2];
+                dataListenerInterface.onDataReceived();
                 break;
         }
 
@@ -209,16 +232,20 @@ public class SensorInfo implements SensorEventListener {
         orienValue[2] = (float) Math.toDegrees(tempValues[2]);
 
 
+//        sg_data.orienValue[0] = (float) Math.toDegrees(tempValues[0]);
+//        sg_data.orienValue[1] = (float) Math.toDegrees(tempValues[1]);
+//        sg_data.orienValue[2] = (float) Math.toDegrees(tempValues[2]);
+        dataListenerInterface.onDataReceived();
     }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
         // TODO Auto-generated method stub
     }
-    public float getData() {
-//        Log.i("ssss", String.valueOf(gSensorValuesTemp[0]));
-        return pvalue;
-
-    }
+//    public float getData() {
+////        Log.i("ssss", String.valueOf(gSensorValuesTemp[0]));
+//        return pvalue;
+//
+//    }
 }
 //http://berniechenopenvpn.blogspot.com/2016/08/sensormanagerregisterlitener.html

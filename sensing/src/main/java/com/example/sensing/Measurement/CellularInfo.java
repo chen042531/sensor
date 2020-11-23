@@ -14,6 +14,8 @@ import android.util.Log;
 
 import androidx.core.content.ContextCompat;
 
+import com.example.sensing.Data.DataListenerInterface;
+
 import java.lang.ref.WeakReference;
 import java.util.List;
 
@@ -41,6 +43,7 @@ public class CellularInfo extends PhoneStateListener {
 
     private TelephonyManager teleManager;
 
+    public DataListenerInterface dataListenerInterface;
     public CellularInfo(Context context) {
         this.serviceContext = new WeakReference<>(context);
         this.teleManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);;
@@ -138,7 +141,7 @@ public class CellularInfo extends PhoneStateListener {
             }
         }
 
-
+        dataListenerInterface.onDataReceived();
     }
 
     private void handoverOccur() {
@@ -195,9 +198,10 @@ public class CellularInfo extends PhoneStateListener {
         ttlCellResidenceTime = 0;
     }
 
-    public void startService() {
+    public void startService(DataListenerInterface dataListener) {
         initBfRun();
         teleManager.listen(this, CellularInfo.LISTEN_SIGNAL_STRENGTHS);
+        dataListenerInterface = dataListener;
     }
 
     public void stopService() {

@@ -51,7 +51,7 @@ public class NetworkState {
         }
         return false;
     }
-    private void getNetworkType(){
+    public String getNetworkType(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Network nw = connectivityManager.getActiveNetwork();
             NetworkCapabilities actNw = connectivityManager.getNetworkCapabilities(nw);
@@ -59,20 +59,25 @@ public class NetworkState {
                 if (actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
                     Network_type = "MOBILE";
                     Log.d("networkstateTest", "mobile") ;
+                    return Network_type;
                 } else if (actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
                     Network_type = "WIFI";
                     Log.d("networkstateTest", "wifi") ;
+                    return Network_type;
                 }  else if (actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)){
                     Network_type = "ETHERNET";
+                    return Network_type;
                 }
                 else{
                     Network_type = null;
+                    return Network_type;
                 }
 
             }
             else {
                 if(nwInfo.getTypeName()!=null) {
                     Network_type = nwInfo.getTypeName();
+                    return Network_type;
                 }
                 else{
                     Network_type = "null";
@@ -80,6 +85,7 @@ public class NetworkState {
 
             }
         }
+        return null;
     }
 
 }

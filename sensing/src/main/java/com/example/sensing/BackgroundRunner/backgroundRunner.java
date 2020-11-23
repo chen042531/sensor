@@ -14,12 +14,21 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
+import com.example.sensing.Data.DataListener;
 import com.example.sensing.Data.SGData;
+import com.example.sensing.Measurement.CellularInfo;
+import com.example.sensing.Measurement.LocationInfo;
+import com.example.sensing.Measurement.NetworkState;
+import com.example.sensing.Measurement.PhoneInfo;
+import com.example.sensing.Measurement.PhoneState;
+import com.example.sensing.Measurement.SensorInfo;
+import com.example.sensing.Measurement.WiFiInfo;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -30,6 +39,18 @@ public class backgroundRunner extends Service {
     public static SGData sgData;
     private int mInterval = 5000; // 5 seconds by default, can be changed later
     private Handler mHandler;
+
+
+
+
+
+    private CellularInfo cellularInfo;
+    private LocationInfo gps;
+    private NetworkState networkState;
+    private PhoneInfo phoneInfo;
+    private PhoneState phoneState;
+    private SensorInfo sensorInfo;
+    private WiFiInfo wifiInfo;
 
     ///////
     @Nullable
@@ -44,40 +65,107 @@ public class backgroundRunner extends Service {
         Log.d("haha_service_start","start");
         notifyMsg();
         sgData = new SGData();
-//        https://medium.com/@JamesQI/android-foreground-service-4131531fb7f8
-        new Handler().postDelayed(new Runnable() {
-                                      @Override
-                                      public void run() {
-                                          Log.d("haha_service_start","ok");
-                                      }
-                                  }, 3000);
-
-        new Handler().postDelayed(new Runnable() {
+//
+//        cellularInfo = new CellularInfo(this);
+//        cellularInfo.startService(new DataListener(cellularInfo){
+//            @Override
+//            public void onDataReceived() {
+//
+//
+//            }
+//        });
+//        gps = new LocationInfo(this);
+//        gps.startService(new DataListener(gps){
+//            @Override
+//            public void onDataReceived() {
+////
+//
+//            }
+//        });
+//
+//        networkState = new NetworkState(this);
+//
+//
+//        phoneInfo = new PhoneInfo(this);
+//        phoneInfo.startService(new DataListener(phoneInfo){
+//            @Override
+//            public void onDataReceived() {
+////
+//            }
+//        });
+//
+//        phoneState = new PhoneState(this);
+//        phoneState.startService(new DataListener(phoneState){
+//            @Override
+//            public void onDataReceived() {
+////
+//            }
+//        });
+        sensorInfo =  new SensorInfo(this);
+        sensorInfo.startService(new DataListener(sensorInfo){
             @Override
-            public void run() {
-                Log.d("haha_service_start","ok");
-                //    收集資料
-                //主動
-                //被動
-
-
-                //    寫入資料
+            public void onDataReceived() {
+                sgData.gSensorValues = SensorInfo.gSensorValues;
+                sgData.magneticValues = SensorInfo.magneticValues;
+                sgData.orienValue = SensorInfo.orienValue;
+                sgData.proximityValue = SensorInfo.proximityValue;
+                sgData.lightValue = SensorInfo.lightValue;
+                sgData.pressureValue = SensorInfo.pressureValue;
             }
-        }, 3000);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Log.d("haha_service_start","ok");
-                //    上傳資料
-            }
-        }, 3000);
+        });
 
-        Runnable helloRunnable = new Runnable() {
-            public void run() {
-                Log.d("haha_service_start","Hello world");
 
-            }
-        };
+//        sgData.Network_type = networkState.getNetworkType();
+
+        wifiInfo = new WiFiInfo(this);
+        wifiInfo.getWiFiInfo();
+        sgData.servingBSSID = WiFiInfo.servingBSSID;
+        sgData.servingChan = WiFiInfo.servingChan;
+        sgData.servingFreq = WiFiInfo.servingFreq;
+        sgData.servingIP = WiFiInfo.servingIP;
+        sgData.servingLevel = WiFiInfo.servingLevel;
+        sgData.servingMAC = WiFiInfo.servingMAC;
+        sgData.servingSSID = WiFiInfo.servingSSID;
+        sgData.servingSpeed = WiFiInfo.servingSpeed;
+
+
+
+
+
+////        https://medium.com/@JamesQI/android-foreground-service-4131531fb7f8
+//        new Handler().postDelayed(new Runnable() {
+//                                      @Override
+//                                      public void run() {
+//                                          Log.d("haha_service_start","ok");
+//                                      }
+//                                  }, 3000);
+//
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                Log.d("haha_service_start","ok");
+//                //    收集資料
+//                //主動
+//                //被動
+//
+//
+//                //    寫入資料
+//            }
+//        }, 3000);
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                Log.d("haha_service_start","ok");
+//                //    上傳資料
+//            }
+//        }, 3000);
+//
+//        Runnable helloRunnable = new Runnable() {
+//            public void run() {
+//                Log.d("haha_service_start","Hello world");
+//
+//            }
+//        };
 
 //        ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
 //        executor.scheduleAtFixedRate(helloRunnable, 0, 3, TimeUnit.SECONDS);

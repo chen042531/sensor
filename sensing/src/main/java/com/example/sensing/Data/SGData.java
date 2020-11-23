@@ -10,7 +10,13 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
-
+import com.example.sensing.Measurement.CellularInfo;
+import com.example.sensing.Measurement.LocationInfo;
+import com.example.sensing.Measurement.NetworkState;
+import com.example.sensing.Measurement.PhoneInfo;
+import com.example.sensing.Measurement.PhoneState;
+import com.example.sensing.Measurement.WiFiInfo;
+import com.example.sensing.Measurement.SensorInfo;
 public class SGData {
 //    AppicationType
 //            ApplicationVersion
@@ -73,10 +79,10 @@ public class SGData {
 
 //    Event":"AppsInfo","LastTime":174145,"AppsInfo":[{"AppName":"edu.nctu.wirelab.sensinggo","TotalTx":204940383,"TotalRx":79512950,"DeltaTx":336,"DeltaRx":0}],"AllAppsTxBytes(MB)":"2870.36","AllAppsRxBytes(MB)":"24990.77"}
 //    PhoneState
-    public static String phoneState = "IDLE"; //IDLE, OFFHOOK, RINGING
-    public static String callState = "IDLE"; //Callout, ""Callin"", RINGING
-    public static String callID = "null";
-    public static String startCallTime, endCallTime;
+    public  String phoneState = "IDLE"; //IDLE, OFFHOOK, RINGING
+    public  String callState = "IDLE"; //Callout, ""Callin"", RINGING
+    public  String callID = "null";
+    public  String startCallTime, endCallTime;
 
     public static int callNum = 0, callExcessNum = 0;
     public static long callStartAt = 0, callHoldingTime = 0, excessLife = 0;
@@ -104,10 +110,10 @@ public class SGData {
     public static double ram_uti;
 
     //    LocationInfo
-    public static LocationManager locationManager;
+    public  LocationManager locationManager;
     public LocationListener locationListener;
     //G: GPS, N: Network, S: Satellite
-    public static android.location.Location userlocationG = null, userlocationN = null;
+    public android.location.Location userlocationG = null, userlocationN = null;
     public static String speedG = null,speedN = null;
     public static Long updateTimeG=0L,updateTimeN=0L,updateTimeS;
     public static String updateTimeStampG ="unknown",updateTimeStampN ="unknown";
@@ -132,20 +138,29 @@ public class SGData {
 
 
     //    sensorInfo
-    public static float[] gSensorValues = new float[3]; // triaxial acceleration
-    public static float[] magneticValues = new float[3];
-    public static int lightValue;
-    public static int sensorInterval;
-    public static String proximityValue;
-    public static float pressureValue,pvalue;
-    public float[] rMatrix = new float[9];    //rotation matrix
-
+    public float[] gSensorValues = new float[3]; // triaxial acceleration
+    public  float[] magneticValues = new float[3];
+    public  int lightValue;
+//    public  int sensorInterval;
+    public String proximityValue;
+    public float pressureValue,pvalue;
     // orientation values, [0]: Azimuth, [1]: Pitch, [2]: Roll
-    public static float[] orienValue = new float[3];
+    public float[] orienValue = new float[3];
+
+
     // networkstate
     public String Network_type;
 
 
+    //wifi
+    public String servingBSSID = "null";
+    public String servingChan = "null";
+    public String servingFreq = "null";
+    public String servingIP = "null";
+    public String servingLevel = "null";
+    public String servingMAC = "null";
+    public String servingSSID = "null";
+    public int servingSpeed = 0;
 
     private Class cls = this.getClass();
 

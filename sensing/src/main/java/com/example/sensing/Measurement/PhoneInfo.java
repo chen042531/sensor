@@ -8,6 +8,8 @@ import android.content.IntentFilter;
 import android.os.BatteryManager;
 import android.util.Log;
 
+import com.example.sensing.Data.DataListenerInterface;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
@@ -37,6 +39,7 @@ public class PhoneInfo extends BroadcastReceiver {
     public static double ram_uti;
     public Context mContext;
     private ActivityManager actManager;
+    public DataListenerInterface dataListenerInterface;
 
     public PhoneInfo(Context mContext) {
         this.mContext = mContext;
@@ -46,6 +49,10 @@ public class PhoneInfo extends BroadcastReceiver {
         mContext.registerReceiver(this, intentFilter);
 
 //        this.sensorManager = (SensorManager)mContext.getSystemService(SENSOR_SERVICE);
+    }
+    public void startService(DataListenerInterface dataListener) {
+
+        dataListenerInterface = dataListener;
     }
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -73,6 +80,7 @@ public class PhoneInfo extends BroadcastReceiver {
             screen_state = "off";
         }
         Log.i("onBattery", String.valueOf(screen_state));
+        dataListenerInterface.onDataReceived();
     }
 
 

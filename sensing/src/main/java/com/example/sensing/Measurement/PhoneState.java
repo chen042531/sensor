@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
 
+import com.example.sensing.Data.DataListenerInterface;
+
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.lang.ref.WeakReference;
@@ -46,6 +48,7 @@ public class PhoneState  extends PhoneStateListener {
 
     private Context mContext;
 
+    public DataListenerInterface dataListenerInterface;
     public PhoneState (Context context) {
 
         this.mContext = context;
@@ -55,6 +58,7 @@ public class PhoneState  extends PhoneStateListener {
     @Override
     public void onCallStateChanged(final int state, String incomingNumber) {
         super.onCallStateChanged(state, incomingNumber);
+
         //Writing file in new thread 2018/10/07
         new Thread(new Runnable() {
             @Override
@@ -107,6 +111,7 @@ public class PhoneState  extends PhoneStateListener {
                 }
             }
         }).start();
+        dataListenerInterface.onDataReceived();
 
     }
 
@@ -138,6 +143,12 @@ public class PhoneState  extends PhoneStateListener {
         teleManger.listen(this, LISTEN_CALL_STATE); // idle, ringing, offhook
     }
 
+    public void startService(DataListenerInterface dataListener) {
+        initBfRun();
+
+        teleManger.listen(this, LISTEN_CALL_STATE); // idle, ringing, offhook
+        dataListenerInterface = dataListener;
+    }
     public void stopService() {
 
         teleManger.listen(this,LISTEN_NONE);

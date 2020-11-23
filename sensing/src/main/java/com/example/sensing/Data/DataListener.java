@@ -5,12 +5,12 @@ import android.view.View;
 import com.example.sensing.Measurement.SensorInfo;
 
 public class DataListener implements DataListenerInterface {
-    SensorInfo observerable;
+    Object observerable;
     View tv1, tv2, tv3;
-    public DataListener(SensorInfo observerable){
+    public DataListener(Object observerable){
         this.observerable = observerable;
     }
-    public DataListener(SensorInfo observerable, View tv1){
+    public DataListener(Object observerable, View tv1){
         this.observerable = observerable;
         this.tv1 = tv1;
     }

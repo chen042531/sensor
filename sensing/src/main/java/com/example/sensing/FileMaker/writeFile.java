@@ -35,18 +35,24 @@ public class writeFile {
 
         try{
 //            FileWriter fileWriter = new FileWriter("ff", true);
-            FileOutputStream fout = new FileOutputStream(UserID+".json", true);
+//            https://blog.csdn.net/diandianxiyu_geek/article/details/78726545
+//            IOException: Read-only file system解決
+            FileOutputStream fout = new FileOutputStream(mContext.getFilesDir().getPath().toString()+"/"
+                    +UserID+".json", true);
+            Log.i("writefile",mContext.getFilesDir().getPath().toString());
             try {
                 Log.i("SGData",sgData.getSGData().toString());
-                String sgDataString = sgData.getSGData().toString()+"\n";
+                String sgDataString = sgData.getSGData().toString()+System.getProperty("line.separator");;
                 byte [] bytes = sgDataString.getBytes();
                 fout.write(bytes);
                 //            fout.close();
                 return true;
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
+                Log.i("writefile", String.valueOf(e));
             } catch (JSONException e) {
                 e.printStackTrace();
+                Log.i("writefile", String.valueOf(e));
             }
 
 
@@ -57,6 +63,7 @@ public class writeFile {
         catch(Exception e){
             e.printStackTrace();
             Log.d("writefile", "gg");
+            Log.i("writefile", String.valueOf(e));
             return false;
         }
 

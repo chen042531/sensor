@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataReceived() {
 //                Log.i("ssss","dddd");
-                Log.i("mainsensor", "sensor: "+sr.getData());
+
                 Log.i("mainsensor", "sensor_dddd: "+sr.magneticValues[0]);
                 String s = String.valueOf(sr.magneticValues[0]);
                 tv1.setText(s);
@@ -98,19 +98,19 @@ public class MainActivity extends AppCompatActivity {
         networkstate = new NetworkState(this);
         networkstate.networkstateTest();
 
-        phoneInfo = new PhoneInfo(this);
-        try {
-            Log.i("cpu", String.valueOf(phoneInfo.cpuInfo()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        phoneInfo.ram();
+//        phoneInfo = new PhoneInfo(this);
+//        try {
+//            Log.i("cpu", String.valueOf(phoneInfo.cpuInfo()));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        phoneInfo.ram();
 
         Log.i("cpu_vol", String.valueOf(phoneInfo.voltage));
         phoneState = new PhoneState(this);
-        phoneState.startService();
+
         cellularInfo = new CellularInfo(this);
-        cellularInfo.startService();
+
 
         SGData sdata = new SGData();
         try {
