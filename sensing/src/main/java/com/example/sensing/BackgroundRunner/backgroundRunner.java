@@ -112,7 +112,7 @@ public class backgroundRunner extends Service {
             @Override
             public void onDataReceived() {
 //
-
+                sgData.userlocationN = LocationInfo.userlocationN;
             }
         });
 //
@@ -123,7 +123,21 @@ public class backgroundRunner extends Service {
         phoneInfo.startService(new DataListener(phoneInfo){
             @Override
             public void onDataReceived() {
-//
+                sgData.electricity = PhoneInfo.electricity;
+                sgData.health = PhoneInfo.health ;
+                sgData.level = PhoneInfo.level;
+                sgData.lastLevel = PhoneInfo.lastLevel ;
+                sgData.lastElect = PhoneInfo.lastElect;
+                sgData.plugged = PhoneInfo.plugged ;
+                sgData.present = PhoneInfo.present ;
+                sgData.scale = PhoneInfo.scale ;
+                sgData.status = PhoneInfo.status ;
+                sgData.technology = PhoneInfo.technology;
+                sgData.tmp = PhoneInfo.tmp ;
+                sgData.temperature = PhoneInfo.temperature ;
+                sgData.voltage = PhoneInfo.voltage ;
+                sgData.screen_state = PhoneInfo.screen_state ;
+
             }
         });
 //
@@ -131,7 +145,21 @@ public class backgroundRunner extends Service {
         phoneState.startService(new DataListener(phoneState){
             @Override
             public void onDataReceived() {
-//
+                sgData.phoneState = PhoneState.phoneState;
+                sgData.callState = PhoneState.callState;
+                sgData.callID = PhoneState.callID;
+                sgData.startCallTime = PhoneState.startCallTime;
+                sgData.endCallTime = PhoneState.endCallTime;
+                sgData.callNum = PhoneState.callNum;
+                sgData.callExcessNum = PhoneState.callExcessNum;
+                sgData.callStartAt = PhoneState.callStartAt;
+                sgData.callHoldingTime =  PhoneState.callHoldingTime;
+                sgData.excessLife =  PhoneState.callHoldingTime;
+                sgData.avgCallHoldTime =  PhoneState.avgCallHoldTime;
+                sgData.avgExcessLife =  PhoneState.avgExcessLife;
+                sgData.ttlCallHoldTime =  PhoneState.ttlCallHoldTime;
+                sgData.ttlExcessLife =  PhoneState.ttlCallHoldTime;
+                sgData.FirstCallCell = PhoneState.FirstCallCell;
             }
         });
         sensorInfo =  new SensorInfo(this);
@@ -145,13 +173,13 @@ public class backgroundRunner extends Service {
                 sgData.lightValue = SensorInfo.lightValue;
                 sgData.pressureValue = SensorInfo.pressureValue;
 
-                try {
-                    Log.i("background_sgData", sgData.getSGData().toString());
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+//                try {
+//                    Log.i("background_sgData", sgData.getSGData().toString());
+//                } catch (IllegalAccessException e) {
+//                    e.printStackTrace();
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
             }
         });
 
@@ -229,27 +257,34 @@ public class backgroundRunner extends Service {
         super.onDestroy();
         stopRepeatingTask();
     }
-    Runnable mStatusChecker = new Runnable() {
+    Runnable sensingRunnable = new Runnable() {
         @Override
         public void run() {
             try {
 //                updateStatus(); //this function can change value of mInterval.
                 Log.d("haha_service_start_haha","Hello world");
+                try {
+                    Log.i("background_sgData", sgData.getSGData().toString());
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
             } finally {
                 // 100% guarantee that this always happens, even if
                 // your update method throws an exception
-                mHandler.postDelayed(mStatusChecker, mInterval);
+                mHandler.postDelayed(sensingRunnable, mInterval);
             }
         }
     };
 
     void startRepeatingTask() {
-        mStatusChecker.run();
+        sensingRunnable.run();
     }
 
     void stopRepeatingTask() {
-        mHandler.removeCallbacks(mStatusChecker);
+        mHandler.removeCallbacks(sensingRunnable);
     }
     @RequiresApi(Build.VERSION_CODES.O)
     private void startMyOwnForeground(){

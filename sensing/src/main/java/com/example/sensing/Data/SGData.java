@@ -84,28 +84,28 @@ public class SGData {
     public  String callID = "null";
     public  String startCallTime, endCallTime;
 
-    public static int callNum = 0, callExcessNum = 0;
-    public static long callStartAt = 0, callHoldingTime = 0, excessLife = 0;
-    public static double avgCallHoldTime = 0, avgExcessLife = 0;
-    public static double ttlCallHoldTime = 0, ttlExcessLife = 0;
-    public static boolean FirstCallCell = false;
+    public  int callNum = 0, callExcessNum = 0;
+    public  long callStartAt = 0, callHoldingTime = 0, excessLife = 0;
+    public  double avgCallHoldTime = 0, avgExcessLife = 0;
+    public  double ttlCallHoldTime = 0, ttlExcessLife = 0;
+    public boolean FirstCallCell = false;
 
     // phoneInfo
-    public static double electricity;
-    public static int health = 0;
-    public static int icon_small = 0;
-    public static int level = 0;
-    public static int lastLevel = -1;
-    public static double lastElect = -1;
-    public static int plugged = 0;
-    public static boolean present = false;
-    public static int scale = 0;
-    public static int status = 0;
-    public static String technology = "0";
-    public static String tmp;
-    public static double temperature = 0.0;
-    public static int voltage = 0;
-    public static String screen_state = "on";
+    public  double electricity;
+    public int health = 0;
+    public int icon_small = 0;
+    public  int level = 0;
+    public  int lastLevel = -1;
+    public  double lastElect = -1;
+    public int plugged = 0;
+    public  boolean present = false;
+    public  int scale = 0;
+    public  int status = 0;
+    public  String technology = "0";
+    public  String tmp;
+    public  double temperature = 0.0;
+    public  int voltage = 0;
+    public  String screen_state = "on";
 
     public static double ram_uti;
 
