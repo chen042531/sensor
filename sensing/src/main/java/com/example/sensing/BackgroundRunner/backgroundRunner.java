@@ -22,6 +22,8 @@ import androidx.core.app.NotificationCompat;
 
 import com.example.sensing.Data.DataListener;
 import com.example.sensing.Data.SGData;
+import com.example.sensing.FileMaker.writeFile;
+import com.example.sensing.FileSender.sendData;
 import com.example.sensing.Measurement.CellularInfo;
 import com.example.sensing.Measurement.LocationInfo;
 import com.example.sensing.Measurement.NetworkState;
@@ -32,6 +34,11 @@ import com.example.sensing.Measurement.WiFiInfo;
 
 import org.json.JSONException;
 
+import java.io.IOException;
+import java.sql.Time;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -42,7 +49,7 @@ public class backgroundRunner extends Service {
     private int mInterval = 5000; // 5 seconds by default, can be changed later
     private Handler mHandler;
 
-
+    private Context mContext ;
 
 
 
@@ -66,6 +73,7 @@ public class backgroundRunner extends Service {
         Log.d("haha_service_start","start");
         Log.d("haha_service_start","start");
         notifyMsg();
+        this.mContext = this;
         sgData = new SGData();
 //
         cellularInfo = new CellularInfo(this);
@@ -240,7 +248,10 @@ public class backgroundRunner extends Service {
 //        executor.scheduleAtFixedRate(helloRunnable, 0, 3, TimeUnit.SECONDS);
         mHandler = new Handler();
         startRepeatingTask();
-        
+//        startRepeatingSending();
+        sendData s = new sendData(this);
+        s.setUserID("user6");
+        s.execute();
         return  START_REDELIVER_INTENT;
     }
     public void notifyMsg() {
@@ -257,6 +268,43 @@ public class backgroundRunner extends Service {
         super.onDestroy();
         stopRepeatingTask();
     }
+
+//    private Runnable createRunnable(final Context mContext){
+
+//        Runnable sensingRunnable = new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+////                updateStatus(); //this function can change value of mInterval.
+//                    Log.d("haha_service_start_haha","Hello world");
+//                    try {
+//                        Log.i("background_sgData", sgData.getSGData().toString());
+//
+//                    } catch (IllegalAccessException e) {
+//                        e.printStackTrace();
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//                    try {
+//                        writeFile write_file = new writeFile(mContext);
+//                        write_file.setUserID("user˙");
+//                        write_file.write(sgData);
+//
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                } finally {
+//                    // 100% guarantee that this always happens, even if
+//                    // your update method throws an exception
+//                    mHandler.postDelayed(sensingRunnable, mInterval);
+//                }
+//            }
+//        };
+
+//        return sensingRunnable;
+//
+//    }
+
     Runnable sensingRunnable = new Runnable() {
         @Override
         public void run() {
@@ -265,26 +313,61 @@ public class backgroundRunner extends Service {
                 Log.d("haha_service_start_haha","Hello world");
                 try {
                     Log.i("background_sgData", sgData.getSGData().toString());
+
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                try {
+                    writeFile write_file = new writeFile(mContext);
+                    write_file.setUserID("user6");
+                    write_file.write(sgData);
 
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+//                String fName = new SimpleDateFormat("yyyyMMddHHmm").format(new Date());
+//                Log.i("BackgroundTime", String.valueOf(fName));
             } finally {
                 // 100% guarantee that this always happens, even if
                 // your update method throws an exception
-                mHandler.postDelayed(sensingRunnable, mInterval);
+                mHandler.postDelayed(sensingRunnable, 10000);
             }
         }
     };
-
+    Runnable sendingRunnable = new Runnable() {
+        @Override
+        public void run() {
+            try {
+             sendData s = new sendData(mContext);
+             s.setUserID("user6");
+             s.execute();
+                Log.i("sendingRunnable", "sendingRunnable");
+            } finally {
+                mHandler.postDelayed(sendingRunnable, 10000);
+            }
+        }
+    };
     void startRepeatingTask() {
+//        Runnable myRunnable = createRunnable(mContext);
+//        myRunnable.run();
         sensingRunnable.run();
     }
 
     void stopRepeatingTask() {
         mHandler.removeCallbacks(sensingRunnable);
+    }
+
+    void startRepeatingSending() {
+//        Runnable myRunnable = createRunnable(mContext);
+//        myRunnable.run();
+        sendingRunnable.run();
+    }
+
+    void stopRepeatingSending() {
+        mHandler.removeCallbacks(sendingRunnable);
     }
     @RequiresApi(Build.VERSION_CODES.O)
     private void startMyOwnForeground(){

@@ -13,6 +13,8 @@ import com.jcraft.jsch.SftpException;
 
 import java.io.FileInputStream;
 import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Properties;
 //import org.apache.http.util.EncodingUtils;
 import static android.content.Context.SENSOR_SERVICE;
@@ -50,6 +52,7 @@ public class sendData extends AsyncTask<Void, String, Integer> {
             return true;
         } catch (JSchException e) {
             e.printStackTrace();
+            Log.d("hostohst", String.valueOf(e));
             return false;
         }
 
@@ -79,9 +82,12 @@ public class sendData extends AsyncTask<Void, String, Integer> {
                 sftpChannel.connect();
                 Log.i("sender","/data/data/com.example.sensor/files/"+UserID_path+".json");
                 Log.i("sender","/home/yicchen/Desktop/"+UserID_path+".json");
-                sftpChannel.put("/data/data/com.example.sensor/files/"+UserID_path+".json","/home/yicchen/Desktop/"+UserID_path+".json");
+                String cTime = new SimpleDateFormat("yyyyMMddHHmm").format(new Date());
+//                Log.i("BackgroundTime", String.valueOf(cTime));
+                sftpChannel.put("/data/data/com.example.sensor/files/"+UserID_path+".json","/home/yicchen/Desktop/"+UserID_path+cTime+".json");
             } catch (JSchException | SftpException e) {
                 e.printStackTrace();
+                Log.i("sender", String.valueOf(e));
             }
 
 
