@@ -63,10 +63,10 @@ public class LocationInfo implements GpsStatus.Listener,LocationListener {
         if (locationListener != null) {
             locationListener.onLocationChanged( location );
         }
-        dataListenerInterface.onDataReceived();
+
         Log.i("gps_onLocationChanged", String.valueOf(userlocationG));
         Log.i("gps_onLocationChanged", String.valueOf(userlocationN));
-        dataListenerInterface.onDataReceived();
+
     }
 
     @Override
